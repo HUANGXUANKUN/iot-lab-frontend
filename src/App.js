@@ -6,7 +6,6 @@ import {
   Switch,
 } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import { AuthContext } from './assets/contexts/auth-context';
 import Main from './views/Main'
 import Manage from './views/Manage';
 import NewDevice from './views/NewDevice';
@@ -15,46 +14,68 @@ import Authentication from './views/Authentication';
 import Device from './views/Device';
 import Error from './views/Error';
 import BackgroundPage from './components/BackgroundPage';
+import { AuthContext } from './assets/contexts/auth-context';
+import { useAuth } from './assets/hooks/auth-hook';
 
 function App() {
+  const { token, login, logout, userId } = useAuth();
   let routes;
 
-  routes =
-    <Switch>
-      <Route path="/devices" exact>
-        <Manage />
-      </Route>
-      <Route path="/main" exact>
-        <Main />
-      </Route>
-      <Route path="/device/new" exact>
-        <NewDevice />
-      </Route>
-      <Route path="/device/edit" exact>
-        <EditDevice />
-      </Route>
-      <Route path="/device/:deviceId" exact>
-        <Device />
-      </Route>
-      <Route path="/login" exact>
-        <Authentication />
-      </Route>
-      <Route path="/error" exact>
-        <Error />
-      </Route>
-      <Redirect to="/devices" />
-
-    </Switch>
+  // if user is login
+  if (token) {
+    routes =
+      <Switch>
+        <Route path="/devices" exact>
+          <Manage />
+        </Route>
+        <Route path="/main" exact>
+          <Main />
+        </Route>
+        <Route path="/device/new" exact>
+          <NewDevice />
+        </Route>
+        <Route path="/device/edit" exact>
+          <EditDevice />
+        </Route>
+        <Route path="/device/:deviceId" exact>
+          <Device />
+        </Route>
+        <Route path="/login" exact>
+          <Authentication />
+        </Route>
+        <Route path="/error" exact>
+          <Error />
+        </Route>
+        <Redirect to="/devices" />
+      </Switch>
+  } else {
+    // Visitors are only allowed to access home page and login page
+    routes = (
+      <Switch>
+        <Route path="/main" exact>
+          <Main />
+        </Route>
+        <Route path="/login">
+          <Authentication />
+        </Route>
+        <Redirect to="/login" />
+      </Switch>
+    );
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: true,
+        isLoggedIn: !!token,
+        token: token,
+        userId: userId,
+        login: login,
+        logout: logout
       }}
     >
       <Router>
-        <Navbar />
         <BackgroundPage>
+          <Navbar />
           <main>{routes}</main>
         </BackgroundPage>
       </Router>

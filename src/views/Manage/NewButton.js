@@ -6,7 +6,7 @@ const ButtonStyled = styled.div`
   background-color: #2EA44F; 
   position: relative;
   margin-left: auto;
-  margin-right: 20px;
+  margin-right: 2  0px;
   width: 50px;
   height: 20px;
   border: none;

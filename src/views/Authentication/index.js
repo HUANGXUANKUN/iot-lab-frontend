@@ -1,7 +1,11 @@
 import React from 'react';
+import Auth from './Auth';
 
-export default function(){
+export default function () {
   return (
-    <div>login</div>
+    <>
+      <div>login</div>
+      <Auth />
+    </>
   )
 }

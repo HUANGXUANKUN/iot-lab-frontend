@@ -6,13 +6,10 @@ import { useHistory } from 'react-router-dom';
 
 
 const GridStyle = styled.div`
-  align-content: center;
-  align-items:center;
   display: grid;
-  text-align: center; 
   padding: 10px;
   font-size: 12pt;
-  justify-items: left;
+  justify-items: center;
   grid-column-gap:10px;
   grid-row-gap:10px;
   grid-template-columns: 1fr; 

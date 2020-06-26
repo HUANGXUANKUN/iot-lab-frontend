@@ -9,17 +9,19 @@ const GridStyle = styled.div`
   align-content: center;
   align-items:center;
   display: grid;
+  /* width: 100;
+  margin: 0; */
   text-align: center; 
   padding: 10px;
-  font-size: 12pt;
-  justify-items: left;
+  font-size: 16pt;
+  justify-items: center;
   grid-column-gap:10px;
   grid-row-gap:10px;
   grid-template-columns: 1fr; 
 `
 
 const FormStyle = styled.div`
-  max-width: 400px;
+  width: 100%;
   margin: 0 auto;
 `
 
