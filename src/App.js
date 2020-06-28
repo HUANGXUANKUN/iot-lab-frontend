@@ -18,7 +18,7 @@ import { AuthContext } from './assets/contexts/auth-context';
 import { useAuth } from './assets/hooks/auth-hook';
 
 function App() {
-  const { token, login, logout, userId } = useAuth();
+  const { token, login, logout, userId, userName } = useAuth();
   let routes;
 
   // if user is login
@@ -58,7 +58,7 @@ function App() {
         <Route path="/login">
           <Authentication />
         </Route>
-        <Redirect to="/login" />
+        <Redirect to="/devices" />
       </Switch>
     );
   }
@@ -69,6 +69,7 @@ function App() {
         isLoggedIn: !!token,
         token: token,
         userId: userId,
+        userName: userName,
         login: login,
         logout: logout
       }}

@@ -2,36 +2,53 @@ import React from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 
-const ButtonStyled = styled.div`
-  background-color: #2EA44F; 
-  position: relative;
-  margin-left: auto;
-  margin-right: 2  0px;
-  width: 50px;
-  height: 20px;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
+const NewButton = styled.div`
+  position:relative;
+  display:inline-block;
+  padding:5px 16px;
+  min-width: 30px;
+  font-size:14px;
+  font-weight:500;
+  line-height:20px;
+  white-space:nowrap;
+  vertical-align:middle;
+  cursor:pointer;
+  border:1px solid;
+  border-radius:6px;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  color:#fff;
+  background-color:#2ea44f;
+  border-color:rgba(27,31,35,.15);
+  box-shadow:0 1px 0 rgba(27,31,35,.1),inset 0 1px 0 hsla(0,0%,100%,.03);
   &:hover {
-    cursor: pointer; 
+    background-color:#2c974b;
+    transition-duration:.1s;
   }
-  border-radius: 8px;
+  &:focus{box-shadow:0 0 0 3px rgba(46,164,79,.4);}
+  &: disabled{
+    color:#959da5;
+    background-color:#fafbfc;
+    border-color:rgba(27,31,35,.15);
+  }
+  &: active{
+    background-color:#2a8f47;
+    box-shadow:inset 0 1px 0 rgba(20,70,32,.2);
+    transition:none;
+  }
 `
 
-export default function (prop) {
+export default function (props) {
   let history = useHistory();
 
   function handleClick() {
-    history.push("/device/new");
+    history.push(props.link);
   }
 
   return (
-    <ButtonStyled color="green" onClick={handleClick}>
-      New 
-    </ButtonStyled>
+    <NewButton onClick={handleClick}>
+      {props.children}
+    </NewButton>
   );
 }

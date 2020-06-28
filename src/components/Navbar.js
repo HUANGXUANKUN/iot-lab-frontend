@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled, { css } from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import {AuthContext} from '../assets/contexts/auth-context';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
+
+const UserNameStyle = styled.div`
+  margin: 0px 10px;
+`
 
 function LinkButton(props) {
   let history = useHistory();
@@ -34,8 +40,10 @@ function LinkButton(props) {
 }
 
 export default function ButtonAppBar() {
-  const classes = useStyles();
+  const auth = useContext(AuthContext);
 
+  const classes = useStyles();
+  
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ background: '#24292E' }}>
@@ -48,7 +56,12 @@ export default function ButtonAppBar() {
           </Typography>
           <LinkButton link="/main" text="Main" />
           <LinkButton link="/devices" text="Devices" />
-          <LinkButton link="/login" text="Login" />
+          {auth.isLoggedIn ?
+            <UserNameStyle>{auth.userName}</UserNameStyle>
+            :
+            <LinkButton link="/login" text="Login" />
+          }
+
         </Toolbar>
       </AppBar>
     </div>
