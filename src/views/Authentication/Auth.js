@@ -75,7 +75,7 @@ const Auth = () => {
             'Content-Type': 'application/json'
           }
         );
-        auth.login(responseData.userId, responseData.token);
+        auth.login(responseData.userId, responseData.userName, responseData.token);
       } catch (err) {
         console.log("fail to login");
        }

@@ -21,9 +21,8 @@ const HeaderStyle = styled.div`
 const InfoStyle = styled.div`
   font-size: 12px;
   display: grid;
-  margin: 10px;
   grid-column-gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 `
 
 
@@ -43,8 +42,8 @@ const Item = (props) => {
         <div>{ipAddress}</div>
         <div>port: {port}</div>
         <div>Last Modified: {getLocalDateTimeString(lastModified)}</div>
-        <EditButton device={props.device} />
-      </InfoStyle>
+        <EditButton link = {"/device/edit"} deviceId = {props.device.id} device={props.device} />
+      </InfoStyle> 
     </Section>
   )
 }
