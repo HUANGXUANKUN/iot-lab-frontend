@@ -58,7 +58,7 @@ function App() {
         <Route path="/login">
           <Authentication />
         </Route>
-        <Redirect to="/devices" />
+        <Redirect to="/login" />
       </Switch>
     );
   }
