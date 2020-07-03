@@ -2,14 +2,14 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
 
-const portAddress = 'http://localhost:5000/api/';
+const portAddress = 'http://localhost:5000/api';
 
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
 const fetchAllDevices = async () => {
   try {
-    const link = portAddress + "devices";
+    const link = portAddress + "/device/devices";
     const response = await fetch(link);
     const responseData = await response.json();
     let newItemList = responseData.devices;
@@ -22,8 +22,15 @@ const fetchAllDevices = async () => {
 
 const fetchDevice = async (deviceId) => {
   try {
-    const link = portAddress + "devices/device/" + deviceId;
-    const response = await fetch(link);
+    const link = portAddress + "/device/get";
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: deviceId,
+      })
+    };
+    const response = await fetch(link, requestOptions);
     const responseData = await response.json();
     console.log("Fetched new data");
     console.log(responseData.device);
@@ -36,7 +43,7 @@ const fetchDevice = async (deviceId) => {
 const editDevice = async (device) => {
   const { id, name, ipAddress, port, description } = device;
 
-  const link = portAddress + "devices/device/edit";
+  const link = portAddress + "/device/edit";
 
   const requestOptions = {
     method: 'POST',
@@ -61,7 +68,7 @@ const editDevice = async (device) => {
 const createDevice = async (device) => {
   const { id, name, ipAddress, port, value, description } = device;
 
-  const link = portAddress + "devices/device/create";
+  const link = portAddress + "/device/create";
 
   const requestOptions = {
     method: 'POST',
@@ -86,7 +93,7 @@ const createDevice = async (device) => {
 
 
 const deleteDevice = async (deviceId) => {
-  const link = portAddress + "devices/device/update";
+  const link = portAddress + "/device/delete";
 
   const requestOptions = {
     method: 'POST',

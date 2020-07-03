@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useHistory,useLocation } from "react-router-dom";
 import styled from 'styled-components';
-import { editDevice } from "../../assets/apis/backend-api";
+import { editDevice } from "../../assets/apis/device-api";
 
 
 const GridStyle = styled.div`

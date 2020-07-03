@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { fetchDevice } from "../../assets/apis/backend-api";
+import { fetchDevice } from "../../assets/apis/device-api";
 import DeviceInfoSection from "./DeviceInfoSection";
 import DataChart from './DataChart';
 import CommandContainer from './CommandContainer';

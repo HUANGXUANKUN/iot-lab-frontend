@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
-import { sendCommand } from "../../assets/apis/backend-api";
+import { sendCommand } from "../../assets/apis/device-api";
 
 const CommandBoardStyled = styled.div`
   display: grid; 
