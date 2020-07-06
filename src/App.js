@@ -23,12 +23,13 @@ function App() {
 
   // if user is login
   if (token) {
+    {console.log("Has token")}
     routes =
       <Switch>
         <Route path="/devices" exact>
           <Manage />
         </Route>
-        <Route path="/main" exact>
+        <Route path="/" exact>
           <Main />
         </Route>
         <Route path="/device/new" exact>
@@ -40,9 +41,6 @@ function App() {
         <Route path="/device/:deviceId" exact>
           <Device />
         </Route>
-        <Route path="/login" exact>
-          <Authentication />
-        </Route>
         <Route path="/error" exact>
           <Error />
         </Route>
@@ -50,9 +48,10 @@ function App() {
       </Switch>
   } else {
     // Visitors are only allowed to access home page and login page
+    {console.log("No token")}
     routes = (
       <Switch>
-        <Route path="/main" exact>
+        <Route path="/" exact>
           <Main />
         </Route>
         <Route path="/login">
