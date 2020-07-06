@@ -19,7 +19,29 @@ const fetchAllHubs = async () => {
     console.log("fetch hubs failed!");
   }
 }
+const createHub = async (hub) => {
+  const { name, ipAddress, port, description } = hub;
 
-export{
-  fetchAllHubs
+  const link = BACKEND_API_KEY + "/hub/create";
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(hub)
+  };
+
+  try {
+    const response = await fetch(link, requestOptions);
+    if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
+    return response;
+  } catch (err) {
+    console.log(err);
+    console.log("Fail to send data");
+    throw err;
+  }
+}
+
+export {
+  fetchAllHubs,
+  createHub,
 }

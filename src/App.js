@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Main from './views/Main'
 import Manage from './views/Manage';
 import NewDevice from './views/NewDevice';
+import NewHub from './views/NewHub';
 import EditDevice from './views/EditDevice';
 import Authentication from './views/Authentication';
 import Device from './views/Device';
@@ -34,6 +35,9 @@ function App() {
         </Route>
         <Route path="/device/new" exact>
           <NewDevice />
+        </Route>
+        <Route path="/hub/new" exact>
+          <NewHub />
         </Route>
         <Route path="/device/edit" exact>
           <EditDevice />

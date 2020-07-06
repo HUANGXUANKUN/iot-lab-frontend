@@ -18,10 +18,10 @@ export default function (props) {
     return (
         <ContainerStyle>
             <ButtonStyle>
-                <NewButton link="/device/new">New Hub</NewButton>
+                <NewButton link="/hub/new">New Hub</NewButton>
             </ButtonStyle>
             <ButtonStyle>
-                <NewButton link="/device/new">New Node</NewButton>
+                <NewButton link="/device/new">New Device</NewButton>
             </ButtonStyle>
         </ContainerStyle>
     )

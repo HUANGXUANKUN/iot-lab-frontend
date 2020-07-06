@@ -84,22 +84,22 @@ const createDevice = async (device) => {
   }
 }
 
-
 const deleteDevice = async (deviceId) => {
-  const link = portAddress + "/device/delete";
-
+  const link = portAddress + "/device/delete/" + deviceId;
   const requestOptions = {
-    method: 'POST',
+    method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: deviceId })
   };
 
   try {
     const response = await fetch(link, requestOptions);
+    if(!response.ok) throw "Error "+ response.status + "! " +  response.statusText;
   } catch (err) {
     console.log(err);
     console.log("Fail to delete device");
+    throw err;
   }
+  console.log("Successfully deleted device");
 }
 
 const getCurrentDataSet = (historical) => {
@@ -121,31 +121,12 @@ const getCurrentDataSet = (historical) => {
   return currentDataSet;
 }
 
-const sendCommand = async (type, content, deviceId) => {
-  const link = portAddress + "command/create";
-  console.log("sending command " + type + ": " + content);
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      type: type,
-      content: content,
-      deviceId: deviceId
-    })
-  };
-  try {
-    const response = await fetch(link, requestOptions);
-  } catch (err) {
-    console.log("Fail to send command");
-  }
-}
-
 export {
   fetchAllDevices,
   fetchDevice,
   getCurrentDataSet,
-  sendCommand,
   createDevice,
   editDevice,
+  deleteDevice,
 };
 
