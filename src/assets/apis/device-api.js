@@ -22,15 +22,8 @@ const fetchAllDevices = async () => {
 
 const fetchDevice = async (deviceId) => {
   try {
-    const link = portAddress + "/device/get";
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: deviceId,
-      })
-    };
-    const response = await fetch(link, requestOptions);
+    const link = portAddress + "/device/get/"  + deviceId;
+    const response = await fetch(link);
     const responseData = await response.json();
     console.log("Fetched new data");
     console.log(responseData.device);

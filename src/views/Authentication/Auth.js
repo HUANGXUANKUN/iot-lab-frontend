@@ -92,16 +92,6 @@ const Auth = () => {
           {
             'Content-Type': 'application/json'
           });
-        // const formData = new FormData();
-        // formData.append('email', formState.inputs.email.value);
-        // formData.append('name', formState.inputs.name.value);
-        // formData.append('password', formState.inputs.password.value);
-        // const responseData = await sendRequest(
-        //   'http://localhost:5000/api/user/signup',
-        //   'POST',
-        //   formData
-        // );
-
         console.log("gotten reply");
         auth.login(responseData.userId, responseData.token);
       } catch (err) {

@@ -54,12 +54,12 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             IoT Dash
           </Typography>
-          <LinkButton link="/main" text="Main" />
-          <LinkButton link="/devices" text="Devices" />
+          <LinkButton link="/" text="HOME" />
+          <LinkButton link="/devices" text="MANAGE" />
           {auth.isLoggedIn ?
             <UserNameStyle>{auth.userName}</UserNameStyle>
             :
-            <LinkButton link="/login" text="Login" />
+            <LinkButton link="/login" text="LOGIN" />
           }
 
         </Toolbar>

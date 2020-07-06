@@ -17,10 +17,9 @@ const ButtonStyle = styled.div`
 export default function (props) {
     return (
         <ContainerStyle>
-
             <ButtonStyle>
                 <NewButton link="/device/new">New Hub</NewButton>
-            </ButtonStyle>            
+            </ButtonStyle>
             <ButtonStyle>
                 <NewButton link="/device/new">New Node</NewButton>
             </ButtonStyle>

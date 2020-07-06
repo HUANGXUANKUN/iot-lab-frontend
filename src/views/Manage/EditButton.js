@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import EditIcon from '@material-ui/icons/Edit';
 
 const ButtonStyle = styled.div`
   position:relative;
   display:inline-block;
+  justify-content: center;
   padding:5px 16px;
   min-width: 30px;
   max-width: 25px;
@@ -48,13 +50,14 @@ export default function (props) {
   function handleClick() {
     history.push({
       pathname: props.link,
-      state: {device: props.device}
+      state: { device: props.device }
     });
   }
 
   return (
     <ButtonStyle onClick={handleClick}>
       Edit
+      <EditIcon />
     </ButtonStyle>
   );
 }
