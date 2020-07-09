@@ -25,9 +25,15 @@ export default function NewDevice() {
   const { register, handleSubmit, watch, errors, reset } = useForm();
   const onSubmit = (data,e) => {
     console.log(data);
-    createDevice(data);
-    e.target.reset();
-    history.push("/devices");
+    try {
+      createDevice(data).then(res => {
+        console.log(res);
+        e.target.reset();
+        history.push("/devices");
+      });
+    }catch{
+      console.log("Fail creating device.");
+    }
   }; //form submit function which will invoke after successful validation
 
 
@@ -41,36 +47,30 @@ export default function NewDevice() {
           <label>Name</label>
           <input name="name" defaultValue="" ref={register} />
 
-          <label>id</label>
-          <input name="id" defaultValue="" ref={register} />
+          <label>Hub Id</label>
+          <input name="hubId" defaultValue="5efe12682e65b590ccd39e2d" ref={register} />
 
           <label>Description</label>
           <input
             name="description"
-            defaultValue=""
-            ref={register({ required: true, maxLength: 50 })}
+            defaultValue="A device for"
+            ref={register({ required: true})}
           />
 
           <label>IP address</label>
           <input
             name="ipAddress"
-            defaultValue="192.27.221.30"
+            defaultValue="192.168.56.1"
             ref={register({ required: true, maxLength: 20 })}
           />
 
           <label>Port</label>
           <input
             name="port"
-            defaultValue="3000"
+            defaultValue="5000"
             ref={register({ required: true, maxLength: 4 })}
           />
 
-          <label>Value</label>
-          <input
-            name="value"
-            defaultValue="0"
-            ref={register({ required: true, maxLength: 10 })}
-          />
           <input type="submit" />
         </GridStyle>
       </form>

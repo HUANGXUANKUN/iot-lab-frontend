@@ -8,6 +8,11 @@ import Section from "../../components/Section";
 import EditButton from "./EditButton";
 import HubCard from "./HubCard";
 
+const Container = styled.div`
+ overflow: auto;
+ height: 90vh;
+`
+
 const HubList = (props) => {
   if (props.hubs === null) {
     return <div> Loading hubs </div>
@@ -15,11 +20,11 @@ const HubList = (props) => {
   else {
     console.log("current hubs: ", props.hubs)
     return (
-      <div className="Hubs Section">
+      <Container className="Hubs Section">
         {props.hubs.map((hub) =>
           <HubCard key={hub._id} hub = {hub} devices={hub.devices} />
         )}
-      </div>
+      </Container>
     )
   }
 }
@@ -36,9 +41,9 @@ const HubPanel = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <HubList hubs={hubs} />
-    </div>
+    </Container>
   )
 }
 

@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import UpdateButton from './UpdateButton';
 import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
 import Section from '../../components/Section';
+import ConnectionStatusPanel from './../../components/ConnectionStatusPanel';
 
 const CurrentSelectedStyled = styled.h2`
   text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
 `
 
 const SectionStyle = styled.div`
@@ -34,11 +37,14 @@ const TitleStyle = styled.div`
 export default function (props) {
   return (
     <Section>
-      <CurrentSelectedStyled> {props.device.name} </CurrentSelectedStyled>
+      <CurrentSelectedStyled>
+        {props.device.name}
+        <ConnectionStatusPanel type="device" id={props.device._id} />
+      </CurrentSelectedStyled>
       <SectionStyle>
-       <TitleStyle>Value: </TitleStyle>
-       <div>{props.device.value}</div>
-       <TitleStyle>Description: </TitleStyle>
+        <TitleStyle>Value: </TitleStyle>
+        <div>{props.device.value}</div>
+        <TitleStyle>Description: </TitleStyle>
         <div>{props.device.description}</div>
         <TitleStyle>IP Address: </TitleStyle>
         <div>{props.device.ipAddress}</div>

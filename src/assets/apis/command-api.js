@@ -39,6 +39,7 @@ const pingDevice = async (id) => {
       console.log("Ping successfully! Device is connected!")
       return true;
     }else{
+      console.log("Fail connecting device!");
       return false;
     }
   } catch (err) {

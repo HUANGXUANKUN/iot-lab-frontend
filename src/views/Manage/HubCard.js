@@ -13,18 +13,24 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
 const Container = styled.div`
-  background-color: #FFFFFF; 
+  ${'' /* background-color: #FFFFFF;  */}
+  background-color: #F1F8FF; 
   border-radius: 10px 10px 10px 10px;
   border: 1px solid #C8E1FF;
   margin-left:20px;
   margin-right:20px;
   margin-top:10px;
-  margin-bottom:10px;
+  margin-bottom:20px;
+  &:hover{
+    background-color:#F1F8FF;
+    transition:none;
+  }
 `
 
 const HubCardContainer = styled.div`
   margin-left:5px;
   margin-right:5px;
+  
 `
 
 const HubCardHeaderStyle = styled.div`
@@ -171,9 +177,7 @@ export default function (props) {
             <div>
               PORT: {props.hub.port}
             </div>
-            <div>
-              NUMBER OF DEVICES: {props.hub.devices.length}
-            </div>
+            <div/>
           </HubCardInfoStyle>
         </HubCardContainer>
         {

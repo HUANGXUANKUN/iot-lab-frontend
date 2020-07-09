@@ -2,14 +2,13 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
 
-const portAddress = 'http://localhost:5000/api';
-
+const BACKEND_API_KEY = 'http://localhost:5000/api';
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
 const fetchAllDevices = async () => {
   try {
-    const link = portAddress + "/device/devices";
+    const link = BACKEND_API_KEY + "/device/devices";
     const response = await fetch(link);
     const responseData = await response.json();
     let newItemList = responseData.devices;
@@ -22,7 +21,7 @@ const fetchAllDevices = async () => {
 
 const fetchDevice = async (deviceId) => {
   try {
-    const link = portAddress + "/device/get/"  + deviceId;
+    const link = BACKEND_API_KEY + "/device/get/"  + deviceId;
     const response = await fetch(link);
     const responseData = await response.json();
     console.log("Fetched new data");
@@ -36,7 +35,7 @@ const fetchDevice = async (deviceId) => {
 const editDevice = async (device) => {
   const { id, name, ipAddress, port, description } = device;
 
-  const link = portAddress + "/device/edit";
+  const link = BACKEND_API_KEY + "/device/edit";
 
   const requestOptions = {
     method: 'POST',
@@ -59,33 +58,30 @@ const editDevice = async (device) => {
 }
 
 const createDevice = async (device) => {
-  const { id, name, ipAddress, port, value, description } = device;
+  const { name, ipAddress, port, description, hubId } = device;
 
-  const link = portAddress + "/device/create";
+  const link = BACKEND_API_KEY + "/device/create";
 
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      id: id,
-      name: name,
-      ipAddress: ipAddress,
-      port: port,
-      value: value,
-      description: description,
-    })
+    body: JSON.stringify(device)
   };
 
   try {
     const response = await fetch(link, requestOptions);
+    if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
+    console.log("Device created successfully!")
+    return response;
   } catch (err) {
     console.log(err);
-    console.log("Fail to send data");
+    console.log("Fail to create device");
+    throw err;
   }
 }
 
 const deleteDevice = async (deviceId) => {
-  const link = portAddress + "/device/delete/" + deviceId;
+  const link = BACKEND_API_KEY + "/device/delete/" + deviceId;
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },

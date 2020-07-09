@@ -28,14 +28,20 @@ const FormStyle = styled.div`
 export default function EditDevice(props) {
   let history = useHistory();
   const location = useLocation();
-  const { id, name, ipAddress, port, description } = location.state.device;
+  const { _id, name, ipAddress, port, description } = location.state.device;
   const { register, handleSubmit, watch, errors, reset } = useForm();
   const onSubmit = (data, e) => {
-    data.id = id;
+    data.id = _id;
     console.log(data);
-    editDevice(data);
-    e.target.reset();
-    history.push("/devices");
+    try {
+      editDevice(data).then(res => {
+        console.log(res);
+        e.target.reset();
+        history.push("/devices");
+      });
+    }catch{
+      console.log("Fail creating device.");
+    }
   }; //form submit function which will invoke after successful validation
 
   return (

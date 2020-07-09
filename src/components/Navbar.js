@@ -56,6 +56,7 @@ export default function ButtonAppBar() {
           </Typography>
           <LinkButton link="/" text="HOME" />
           <LinkButton link="/devices" text="MANAGE" />
+          <LinkButton link="/network" text="NETWORK" />
           {auth.isLoggedIn ?
             <UserNameStyle>{auth.userName}</UserNameStyle>
             :

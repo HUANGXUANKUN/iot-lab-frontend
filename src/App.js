@@ -13,6 +13,7 @@ import NewHub from './views/NewHub';
 import EditDevice from './views/EditDevice';
 import Authentication from './views/Authentication';
 import Device from './views/Device';
+import Network from './views/Network';
 import Error from './views/Error';
 import BackgroundPage from './components/BackgroundPage';
 import { AuthContext } from './assets/contexts/auth-context';
@@ -47,6 +48,9 @@ function App() {
         </Route>
         <Route path="/error" exact>
           <Error />
+        </Route>
+        <Route path="/network" exact>
+          <Network />
         </Route>
         <Redirect to="/devices" />
       </Switch>
