@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
@@ -40,7 +40,8 @@ const SpinnerStyle = styled(Dot)`
 `
 
 const ConnectionStatus = props => {
-  const [connectionStatus, setConnectionStatus] = useState('Loading')
+  const [connectionStatus, setConnectionStatus] = useState('Loading');
+  const unmounted = useRef(false);
 
   function setConnection(isConnected) {
     if (isConnected) {
@@ -55,11 +56,14 @@ const ConnectionStatus = props => {
     let responseStatus = false;
     try {
       if (props.type === 'hub') {
-        pingHub(props.id).then(isConnected => setConnection(isConnected));
+        pingHub(props.id).then(isConnected => {
+          if (!unmounted.current) setConnection(isConnected);
+        })
       } else if (props.type === 'device') {
-        pingDevice(props.id).then(isConnected => setConnection(isConnected));
+        pingDevice(props.id).then(isConnected => {
+          if (!unmounted.current) setConnection(isConnected)
+        });
       }
-
     } catch{
       console.log("fail to ping " + props.type + " with id = " + props.id);
       setConnectionStatus('Disconnected');
@@ -69,6 +73,7 @@ const ConnectionStatus = props => {
   useEffect(() => {
     setConnectionStatus('Loading');
     ping();
+    return () => { unmounted.current = true }
   }, [])
 
   let StatusIcon = <SpinnerStyle>
