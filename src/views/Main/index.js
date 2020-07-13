@@ -1,9 +1,11 @@
 import React from 'react';
-
 import styled from 'styled-components';
+import Loader from 'react-loader-spinner';
 
-export default function () {
+export default function(){
   return (
-    <div>main</div>
+    <div>
+      Homepage
+    </div>
   )
 }

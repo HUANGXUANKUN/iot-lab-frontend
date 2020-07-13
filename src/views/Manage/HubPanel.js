@@ -7,15 +7,16 @@ import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
 import EditButton from "./EditButton";
 import HubCard from "./HubCard";
+import LoadingPage from '../../components/LoadingPage';
 
 const Container = styled.div`
  overflow: auto;
- height: 90vh;
+ height: 80vh;
 `
 
 const HubList = (props) => {
   if (props.hubs === null) {
-    return <div> Loading hubs </div>
+    return <LoadingPage/>
   }
   else {
     console.log("current hubs: ", props.hubs)

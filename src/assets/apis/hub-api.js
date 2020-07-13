@@ -7,16 +7,18 @@ const BACKEND_API_KEY = 'http://localhost:5000/api';
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
-const fetchAllHubs = async () => {
+const fetchAllHubs =  async () => {
   try {
     const link = BACKEND_API_KEY + "/hub/hubs";
     const response = await fetch(link);
+    if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
     const responseData = await response.json();
     let newItemList = responseData.hubs;
-    console.log("fetch hubs successfully!: ", newItemList);
+    console.log("Successfully fetched hubs!: ", newItemList);
     return newItemList;
-  } catch (err) {
-    console.log("fetch hubs failed!");
+  } catch (error) {
+    console.log("Fail fetching hubs!");
+    throw error;
   }
 }
 const createHub = async (hub) => {
