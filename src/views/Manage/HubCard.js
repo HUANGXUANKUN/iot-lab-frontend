@@ -7,12 +7,14 @@ import { fetchAllHubs } from "../../apis/hub-api";
 import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
 import EditButton from "./EditButton";
+import DeviceCard from "./DeviceCard";
 import ConnectionStatus from '../../components/ConnectionStatusPanel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 
-const Container = styled.div`
+const HubCardStyle = styled.div`
   ${'' /* background-color: #FFFFFF;  */}
   background-color: #F1F8FF; 
   border-radius: 10px 10px 10px 10px;
@@ -41,111 +43,43 @@ const HubCardHeaderStyle = styled.div`
   align-items: center;
   grid-column-gap: 10px;
   justify-content: center;
-  grid-template-columns: 1fr 3fr 2fr 1fr;
+  grid-template-columns: 1fr 6fr auto;
 `;
 
 const HubCardDescription = styled.div`
   color: #0366D6;
   font-size: 16px;
+  text-align: left;
 `
 const HubCardInfoStyle = styled.div`
   margin: 10px;
   font-size: 10px;
   display: grid;
   grid-column-gap: 10px;
-  grid-template-columns: 1fr 1fr 2fr 3fr auto;
+  grid-template-columns: 1fr 1fr 2fr 3fr;
 `
 
-const DeviceCardContainer = styled.div`
-  background-color: #FFFFFF; 
-  margin: 5px 5px;
-  border: 1px solid #E1E4E8;
-  border-radius: 8px 8px 8px 8px;
-  &:hover{
-    background-color:#F6F8FA;
-    transition:none;
-  }
-`;
-
-const DeviceCardHeaderGrid = styled.div`
-  margin: 10px;
-  display: grid;
-  ${'' /* color: #0366D6; */}
-  color: black;
-  align-items: center;
-  grid-column-gap: 10px;
-  grid-template-columns: 1fr 3fr 2fr 1fr;
-`;
-
-const DeviceCardInfoStyle = styled.div`
-  margin: 10px;
-  font-size: 12px;
-  display: grid;
-  grid-column-gap: 10px;
-  grid-template-columns: 1fr 1fr 2fr 3fr auto;;
-`
 const HeaderStyle = styled.div`
   color: #0366D6;
   font-size: 32px;
   font-weight: bold;
+  width: 110px;
 `;
 
-const DeviceCard = (props) => {
-  const [visible, setVisible] = useState(true);
-  const { _id, name, lastModified, value, ipAddress, description, port } = props.device;
-  let history = useHistory();
-  function editDeviceHandler() {
-    history.push({
-      pathname: "/device/edit",
-      state: { device: props.device }
-    });
-  }
+const ConnectionStatusStyle = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+`
 
-  function deleteDeviceHandler() {
-    try {
-      deleteDevice(_id).then(() => {
-        setVisible(false);
-      }
-      )
-    } catch{
-      // pop-up
-      console.log("POP-UP! Delete Fail!");
-    }
-  }
+const ButtonGroup = styled.div`
+  min-width: 200px;
+  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
+`
 
-  return (
-    visible &&
-    <DeviceCardContainer>
-      <DeviceCardHeaderGrid>
-        <HeaderStyle>
-          <LinkButton link={`/device/${_id}`} text={name}></LinkButton>
-        </HeaderStyle>
-        <div>{description}</div>
-        <div />
-        <ConnectionStatus type='device' id={_id} />
-      </DeviceCardHeaderGrid>
-      <DeviceCardInfoStyle>
-        <div>{ipAddress}</div>
-        <div>port: {port}</div>
-        <div>Last Modified: {getLocalDateTimeString(lastModified)}</div>
-        <div />
-        <div>
-          <IconButton onClick={deleteDeviceHandler} aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-          <IconButton onClick={editDeviceHandler} aria-label="edit">
-            <EditIcon />
-          </IconButton>
-          {/* <EditButton link={"/device/edit"} deviceId={props.device._id} device={props.device} /> */}
-        </div>
-      </DeviceCardInfoStyle>
-    </DeviceCardContainer>
-  )
-}
-
-
-
-export default function (props) {
+const HubCard = (props) => {
   const [hub, setHub] = useState(null);
   useEffect(() => {
     setHub(props.hub);
@@ -158,34 +92,44 @@ export default function (props) {
   else {
     console.log("current devices: ", props.devices)
     return (
-      <Container>
+      <>
         <HubCardContainer>
           <HubCardHeaderStyle>
-            <HeaderStyle>
-              {props.hub.name}
-            </HeaderStyle>
-            <HubCardDescription>
-              {props.hub.description}
-            </HubCardDescription>
-            <div />
-            <ConnectionStatus type='hub' id={props.hub._id} />
+            <HeaderStyle>{props.hub.name}</HeaderStyle>
+            <HubCardDescription>{props.hub.description}</HubCardDescription>
+            <div>
+              <ConnectionStatusStyle>
+                <ConnectionStatus type='hub' id={props.hub._id} />
+              </ConnectionStatusStyle>
+            </div>
           </HubCardHeaderStyle>
           <HubCardInfoStyle>
-            <div>
-              IP: {props.hub.ipAddress}
-            </div>
-            <div>
-              PORT: {props.hub.port}
-            </div>
-            <div/>
+            <div>IP: {props.hub.ipAddress}</div>
+            <div>PORT: {props.hub.port}</div>
+            <div />
+            <ButtonGroup>
+              <IconButton aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+              <IconButton aria-label="edit">
+                <EditIcon />
+              </IconButton>
+              <IconButton aria-label="add">
+                <AddIcon />
+              </IconButton>
+            </ButtonGroup>
           </HubCardInfoStyle>
         </HubCardContainer>
-        {
-          props.devices.map((device) =>
-            <DeviceCard key={device._id} device={device} />
-          )
-        }
-      </Container>
+        {props.devices.map((device) => <DeviceCard key={device._id} device={device} />)}
+      </>
     )
   }
+}
+
+export default function (props) {
+  return (
+    <HubCardStyle>
+      <HubCard {...props} />
+    </HubCardStyle>
+  )
 }
