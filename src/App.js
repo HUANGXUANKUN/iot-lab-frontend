@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -6,26 +6,32 @@ import {
   Switch,
 } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Main from './views/Main'
-import Manage from './views/Manage';
-import NewDevice from './views/NewDevice';
-import NewHub from './views/NewHub';
-import EditDevice from './views/EditDevice';
-import Authentication from './views/Authentication';
-import Device from './views/Device';
-import Network from './views/Network';
-import Error from './views/Error';
 import BackgroundPage from './components/BackgroundPage';
+import LoadingPage from './components/LoadingPage';
 import { AuthContext } from './assets/contexts/auth-context';
 import { useAuth } from './assets/hooks/auth-hook';
 
-function App() {
+/**
+ * Lazy loading to allows code splitting in chunk. 
+ */
+const Main = React.lazy(() => import('./views/Main'))
+const Manage = React.lazy(() => import('./views/Manage'))
+const NewDevice = React.lazy(() => import('./views/NewDevice'))
+const NewHub = React.lazy(() => import('./views/NewHub'))
+const EditDevice = React.lazy(() => import('./views/EditDevice'))
+const Authentication = React.lazy(() => import('./views/Authentication'))
+const Device = React.lazy(() => import('./views/Device'))
+const Network = React.lazy(() => import('./views/Network'))
+const Error = React.lazy(() => import('./views/Error'))
+
+
+const App = () => {
   const { token, login, logout, userId, userName } = useAuth();
   let routes;
 
   // if user is login
   if (token) {
-    {console.log("Has token")}
+    { console.log("Has token") }
     routes =
       <Switch>
         <Route path="/devices" exact>
@@ -56,7 +62,7 @@ function App() {
       </Switch>
   } else {
     // Visitors are only allowed to access home page and login page
-    {console.log("No token")}
+    { console.log("No token") }
     routes = (
       <Switch>
         <Route path="/" exact>
@@ -84,7 +90,11 @@ function App() {
       <Router>
         <BackgroundPage>
           <Navbar />
-          <main>{routes}</main>
+          <main>
+            <Suspense fallback={<LoadingPage />}>
+              {routes}
+            </Suspense>
+          </main>
         </BackgroundPage>
       </Router>
     </AuthContext.Provider>
