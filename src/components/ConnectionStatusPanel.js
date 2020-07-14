@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import { pingHub, pingDevice } from '../assets/apis/command-api';
+import { pingHub, pingDevice } from '../apis/command-api';
 import Loader from 'react-loader-spinner'
 
 const ContainerGrid = styled.div`

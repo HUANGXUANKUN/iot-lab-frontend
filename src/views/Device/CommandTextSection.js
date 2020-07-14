@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
-import { sendCommand } from "../../assets/apis/command-api";
+import { sendCommand } from "../../apis/command-api";
 
 const TextSectionStyled = styled.div`
   display: grid; 

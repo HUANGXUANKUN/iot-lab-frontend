@@ -2,14 +2,14 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
 
-const BACKEND_API_KEY = 'http://localhost:5000/api';
+const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
 
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
 const fetchAllHubs =  async () => {
   try {
-    const link = BACKEND_API_KEY + "/hub/hubs";
+    const link = API_KEY + "/hub/hubs";
     const response = await fetch(link);
     if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
     const responseData = await response.json();
@@ -24,7 +24,7 @@ const fetchAllHubs =  async () => {
 const createHub = async (hub) => {
   const { name, ipAddress, port, description } = hub;
 
-  const link = BACKEND_API_KEY + "/hub/create";
+  const link = API_KEY + "/hub/create";
 
   const requestOptions = {
     method: 'POST',

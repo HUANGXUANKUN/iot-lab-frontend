@@ -2,13 +2,15 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
 
-const BACKEND_API_KEY = 'http://localhost:5000/api';
+// const API_KEY = 'http://localhost:5000/api';
+const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
+
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
 const fetchAllDevices = async () => {
   try {
-    const link = BACKEND_API_KEY + "/device/devices";
+    const link = API_KEY + "/device/devices";
     const response = await fetch(link);
     const responseData = await response.json();
     let newItemList = responseData.devices;
@@ -21,7 +23,7 @@ const fetchAllDevices = async () => {
 
 const fetchDevice = async (deviceId) => {
   try {
-    const link = BACKEND_API_KEY + "/device/get/"  + deviceId;
+    const link = API_KEY + "/device/get/"  + deviceId;
     const response = await fetch(link);
     const responseData = await response.json();
     console.log("Fetched new data");
@@ -35,7 +37,7 @@ const fetchDevice = async (deviceId) => {
 const editDevice = async (device) => {
   const { id, name, ipAddress, port, description } = device;
 
-  const link = BACKEND_API_KEY + "/device/edit";
+  const link = API_KEY + "/device/edit";
 
   const requestOptions = {
     method: 'POST',
@@ -60,7 +62,7 @@ const editDevice = async (device) => {
 const createDevice = async (device) => {
   const { name, ipAddress, port, description, hubId } = device;
 
-  const link = BACKEND_API_KEY + "/device/create";
+  const link = API_KEY + "/device/create";
 
   const requestOptions = {
     method: 'POST',
@@ -81,7 +83,7 @@ const createDevice = async (device) => {
 }
 
 const deleteDevice = async (deviceId) => {
-  const link = BACKEND_API_KEY + "/device/delete/" + deviceId;
+  const link = API_KEY + "/device/delete/" + deviceId;
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },

@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
-import { createDevice } from "../../assets/apis/device-api";
+import { createDevice } from "../../apis/device-api";
 import { useHistory } from 'react-router-dom';
 
 

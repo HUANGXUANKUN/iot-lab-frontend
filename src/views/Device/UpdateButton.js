@@ -17,7 +17,7 @@ const clickButtonHandler = (setDeviceHandler) => {
 export default function (props) {
   return (
     <ConfirmButtonStyled>
-      <Button variant="primary" size="lg" onClick={() => clickButtonHandler(props.setDeviceHandler)}>
+      <Button variant="secondary" size="m" onClick={() => clickButtonHandler(props.setDeviceHandler)}>
         Fetch Data
         </Button>
     </ConfirmButtonStyled>

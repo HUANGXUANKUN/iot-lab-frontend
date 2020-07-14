@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
 import styled from 'styled-components';
-import { fetchAllDevices } from "../../assets/apis/device-api";
-import { fetchAllHubs } from "../../assets/apis/hub-api";
+import { fetchAllDevices } from "../../apis/device-api";
+import { fetchAllHubs } from "../../apis/hub-api";
 import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
 import EditButton from "./EditButton";

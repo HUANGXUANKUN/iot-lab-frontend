@@ -7,7 +7,6 @@ const BackgroundPage = styled.div`
   position: fixed;
   width: 100vw;
   height: 100vh;
-  padding: 5px;
 `
 
 export default BackgroundPage;
