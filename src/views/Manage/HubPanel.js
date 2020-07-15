@@ -16,14 +16,14 @@ const Container = styled.div`
 
 const HubList = (props) => {
   if (props.hubs === null) {
-    return <LoadingPage/>
+    return <LoadingPage />
   }
   else {
     console.log("current hubs: ", props.hubs)
     return (
       <Container className="Hubs Section">
         {props.hubs.map((hub) =>
-          <HubCard key={hub._id} hub = {hub} devices={hub.devices} />
+          <HubCard key={hub._id} hub={hub} devices={hub.devices} />
         )}
       </Container>
     )
@@ -31,16 +31,6 @@ const HubList = (props) => {
 }
 
 const HubPanel = (props) => {
-  // const [hubs, setHubs] = useState(null);
-  // useEffect(() => {
-  //   try {
-  //     fetchAllHubs().then(res => setHubs(res));
-  //     console.log("Hubs data: ", this.state.hubs);
-  //   } catch{
-  //     console.log("fail fetching data");
-  //   }
-  // }, []);
-
   return (
     <Container>
       <HubList hubs={props.hubs} />

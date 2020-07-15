@@ -13,6 +13,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
+import LoadingPage from '../../components/LoadingPage';
+import Modal from 'react-modal';
+import { Col, Row, Button } from 'react-bootstrap';
 
 const HubCardStyle = styled.div`
   ${'' /* background-color: #FFFFFF;  */}
@@ -78,21 +81,77 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: flex-end;
 `
+const FormStyle = styled.div`
+  width: 100%;
+  margin: 0 auto;
+`
 
-export default function HubCard(props){
+const modalCustomStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    padding: '40px',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+export default function HubCard(props) {
+  const [visible, setVisible] = useState(true);
   const [hub, setHub] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const showHub = () => setVisible(true);
+  const hideHub = () => setVisible(false);
+
+  const { _id, name, ipAddress, description, port } = props.hub;
+
+  function deleteHubHandler() {
+    try {
+      // delete hub
+      hideHub();
+    } catch{
+      window.alert("Fail deleting hub!");
+    }
+  }
+
+  function showEditModalHandler() {
+    setEditModalVisible(true);
+  }
+
+  function closeEditModalHandler() {
+    setEditModalVisible(false);
+  }
+
+  function showDeleteModalHandler() {
+    window.alert("clicked delete modal");
+    setDeleteModalVisible(true);
+  }
+
+  function closeDeleteModalHandler() {
+    setDeleteModalVisible(false);
+  }
+
+  function confirmDeleteHandler() {
+    deleteHubHandler();
+    setDeleteModalVisible(false);
+  }
+
   useEffect(() => {
     setHub(props.hub);
   }, [])
 
   if (props.hub === null) {
-    return <div> Loading hub data</div>
+    return <LoadingPage />;
   }
 
   else {
     console.log("current devices: ", props.devices)
     return (
-      <HubCardStyle>
+      visible && <HubCardStyle>
         <HubCardHeaderStyle>
           <HeaderStyle>{props.hub.name}</HeaderStyle>
           <HubCardDescription>{props.hub.description}</HubCardDescription>
@@ -107,7 +166,7 @@ export default function HubCard(props){
           <div>PORT: {props.hub.port}</div>
           <div />
           <ButtonGroup>
-            <IconButton aria-label="delete">
+            <IconButton onClick={showDeleteModalHandler} aria-label="delete">
               <DeleteIcon />
             </IconButton>
             <IconButton aria-label="edit">
@@ -119,7 +178,40 @@ export default function HubCard(props){
           </ButtonGroup>
         </HubCardInfoStyle>
         {props.devices.map((device) => <DeviceCard key={device._id} device={device} />)}
+        <Modal
+          isOpen={deleteModalVisible}
+          onRequestClose={closeDeleteModalHandler}
+          style={modalCustomStyles}
+        >
+          <DeleteModalContent hub={hub} confirmDeleteHandler={confirmDeleteHandler} />
+        </Modal>
       </HubCardStyle>
     )
   }
+}
+
+const DeleteModalContent = (props) => {
+
+  return (
+    <>
+      <div>
+        <Row>
+          <Col xs={12} md={12}>
+            Confirm deleting the following hub:
+            </Col>
+        </Row>
+        <Row>
+          <Col xs={6} md={4} style={{ fontWeight: 'bold' }}>
+            {props.hub.name}
+          </Col>
+        </Row>
+      </div>
+      <Row>
+        <Col />
+        <Col xs={6} md={4}>
+          <Button variant="danger" onClick={props.confirmDeleteHandler}>Confirm</Button>
+        </Col>
+      </Row>
+    </>
+  )
 }
