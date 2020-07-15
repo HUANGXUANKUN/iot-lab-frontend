@@ -21,6 +21,7 @@ const fetchAllHubs =  async () => {
     throw error;
   }
 }
+
 const createHub = async (hub) => {
   const { name, ipAddress, port, description } = hub;
 
