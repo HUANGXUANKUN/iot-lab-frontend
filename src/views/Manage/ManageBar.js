@@ -3,19 +3,23 @@ import styled from 'styled-components';
 import NewButton from './NewButton';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
-import { createHub } from "../../apis/hub-api";
+import { createHub, fetchAllHubs } from "../../apis/hub-api";
 import Modal from "react-modal";
+import HubPanel from "./HubPanel";
 
-const ContainerStyle = styled.div`
+const BarStyle = styled.div`
     display: flex;
     margin: 5px;
-    margin-right: 10px;
-    margin-left: auto;
-    max-width: fit-content;
+    margin-right: 30px;
+    margin-left:auto;
+    width: 100px;
+    align-items: center;
+    height:40px;
 `
 
 const ButtonStyle = styled.div`
-    margin: 0px 5px;    
+    margin: 0px 5px; 
+    width: 100px;   
 `
 
 const FormGridStyle = styled.div`
@@ -50,13 +54,19 @@ const NewHubForm = (props) => {
     const onSubmit = (data, e) => {
         console.log(data);
         try {
+            console.log("Creating Hub...");
             createHub(data).then(res => {
                 console.log(res);
                 e.target.reset();
+                console.log("Closing...");
                 props.onClose();
+                console.log("getting new hubs data...");
+                props.onSubmitNewHub();
+                console.log("Done...");
             });
         } catch{
             console.log("Fail creating hub");
+            window.alert("Fail creating hub");
         }
     }; //form submit function which will invoke after successful validation
 
@@ -98,6 +108,7 @@ const NewHubForm = (props) => {
 
 export default function (props) {
     const [newHubModalVisible, setNewHubModalVisible] = useState(false);
+    const [hubs, setHubs] = useState(null);
 
     function showNewHubModalHandler() {
         setNewHubModalVisible(true);
@@ -107,19 +118,45 @@ export default function (props) {
         setNewHubModalVisible(false);
     }
 
+    function fetchHubsHandler() {
+        try {
+            fetchAllHubs().then(res => { 
+                setHubs(res);
+                console.log("Hubs data: ", res);
+             });
+        } catch{
+            console.log("fail fetching data");
+            window.alert("fail fetching data")
+        }
+    }
+
+    useEffect(() => {
+        try {
+            fetchAllHubs().then(res => { 
+                setHubs(res);
+                console.log("Hubs data: ", res);
+             });
+        } catch{
+            console.log("fail fetching data");
+        }
+    }, []);
+
     return (
-        <ContainerStyle>
-            <ButtonStyle>
-                <NewButton onClick={showNewHubModalHandler}>New Hub</NewButton>
-            </ButtonStyle>
-            <Modal
-                isOpen={newHubModalVisible}
-                onRequestClose={closeNewHubModalHandler}
-                style={modalCustomStyles}
-                contentLabel="New Hub Modal"
-            >
-                <NewHubForm onClose={closeNewHubModalHandler} />
-            </Modal>
-        </ContainerStyle>
+        <>
+            <BarStyle>
+                <ButtonStyle>
+                    <NewButton onClick={showNewHubModalHandler}>New Hub</NewButton>
+                </ButtonStyle>
+                <Modal
+                    isOpen={newHubModalVisible}
+                    onRequestClose={closeNewHubModalHandler}
+                    style={modalCustomStyles}
+                    contentLabel="New Hub Modal"
+                >
+                    <NewHubForm onClose={closeNewHubModalHandler} onSubmitNewHub={fetchHubsHandler} />
+                </Modal>
+            </BarStyle>
+            <HubPanel hubs={hubs} />
+        </>
     )
 }

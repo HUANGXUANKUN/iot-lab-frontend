@@ -72,7 +72,7 @@ const ConnectionStatus = props => {
 
   useEffect(() => {
     setConnectionStatus('Loading');
-    ping();
+    // ping();
     return () => { unmounted.current = true }
   }, [])
 

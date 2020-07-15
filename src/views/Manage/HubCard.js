@@ -79,8 +79,7 @@ const ButtonGroup = styled.div`
   align-items: flex-end;
 `
 
-
-const HubCard = (props) => {
+export default function HubCard(props){
   const [hub, setHub] = useState(null);
   useEffect(() => {
     setHub(props.hub);
@@ -93,44 +92,34 @@ const HubCard = (props) => {
   else {
     console.log("current devices: ", props.devices)
     return (
-      <>
-        <HubCardContainer>
-          <HubCardHeaderStyle>
-            <HeaderStyle>{props.hub.name}</HeaderStyle>
-            <HubCardDescription>{props.hub.description}</HubCardDescription>
-            <div>
-              <ConnectionStatusStyle>
-                <ConnectionStatus type='hub' id={props.hub._id} />
-              </ConnectionStatusStyle>
-            </div>
-          </HubCardHeaderStyle>
-          <HubCardInfoStyle>
-            <div>IP: {props.hub.ipAddress}</div>
-            <div>PORT: {props.hub.port}</div>
-            <div />
-            <ButtonGroup>
-              <IconButton aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
-              <IconButton aria-label="edit">
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="add">
-                <AddIcon />
-              </IconButton>
-            </ButtonGroup>
-          </HubCardInfoStyle>
-        </HubCardContainer>
+      <HubCardStyle>
+        <HubCardHeaderStyle>
+          <HeaderStyle>{props.hub.name}</HeaderStyle>
+          <HubCardDescription>{props.hub.description}</HubCardDescription>
+          <div>
+            <ConnectionStatusStyle>
+              <ConnectionStatus type='hub' id={props.hub._id} />
+            </ConnectionStatusStyle>
+          </div>
+        </HubCardHeaderStyle>
+        <HubCardInfoStyle>
+          <div>IP: {props.hub.ipAddress}</div>
+          <div>PORT: {props.hub.port}</div>
+          <div />
+          <ButtonGroup>
+            <IconButton aria-label="delete">
+              <DeleteIcon />
+            </IconButton>
+            <IconButton aria-label="edit">
+              <EditIcon />
+            </IconButton>
+            <IconButton aria-label="add">
+              <AddIcon />
+            </IconButton>
+          </ButtonGroup>
+        </HubCardInfoStyle>
         {props.devices.map((device) => <DeviceCard key={device._id} device={device} />)}
-      </>
+      </HubCardStyle>
     )
   }
-}
-
-export default function (props) {
-  return (
-    <HubCardStyle>
-      <HubCard {...props} />
-    </HubCardStyle>
-  )
 }

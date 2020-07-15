@@ -247,6 +247,6 @@ export default function (props) {
           </Col>
         </Row>
       </Modal>
-    </DeviceCardContainer >
+    </DeviceCardContainer>
   )
 }

@@ -11,7 +11,7 @@ import LoadingPage from '../../components/LoadingPage';
 
 const Container = styled.div`
  overflow: auto;
- height: 80vh;
+ height: 90vh;
 `
 
 const HubList = (props) => {
@@ -30,20 +30,20 @@ const HubList = (props) => {
   }
 }
 
-const HubPanel = () => {
-  const [hubs, setHubs] = useState(null);
-  useEffect(() => {
-    try {
-      fetchAllHubs().then(res => setHubs(res));
-      console.log("Hubs data: ", this.state.hubs);
-    } catch{
-      console.log("fail fetching data");
-    }
-  }, []);
+const HubPanel = (props) => {
+  // const [hubs, setHubs] = useState(null);
+  // useEffect(() => {
+  //   try {
+  //     fetchAllHubs().then(res => setHubs(res));
+  //     console.log("Hubs data: ", this.state.hubs);
+  //   } catch{
+  //     console.log("fail fetching data");
+  //   }
+  // }, []);
 
   return (
     <Container>
-      <HubList hubs={hubs} />
+      <HubList hubs={props.hubs} />
     </Container>
   )
 }
