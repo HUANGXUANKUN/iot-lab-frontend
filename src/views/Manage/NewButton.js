@@ -40,14 +40,8 @@ const NewButton = styled.div`
 `
 
 export default function (props) {
-  let history = useHistory();
-
-  function handleClick() {
-    history.push(props.link);
-  }
-
   return (
-    <NewButton onClick={handleClick}>
+    <NewButton onClick = {props.onClick}>
       {props.children}
     </NewButton>
   );

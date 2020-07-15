@@ -3,18 +3,17 @@ import { useHistory, useLocation } from "react-router-dom";
 import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
 import styled from 'styled-components';
 import { fetchAllDevices, deleteDevice } from "../../apis/device-api";
-import { fetchAllHubs } from "../../apis/hub-api";
 import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
-import EditButton from "./EditButton";
 import ConnectionStatus from '../../components/ConnectionStatusPanel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import { Modal, Button } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 import { editDevice } from "../../apis/device-api";
+import Modal from 'react-modal';
 
 const DeviceCardContainer = styled.div`
   background-color: #FFFFFF; 
@@ -30,12 +29,11 @@ const DeviceCardContainer = styled.div`
 const DeviceCardHeaderGrid = styled.div`
   margin: 10px;
   display: grid;
-  ${'' /* color: #0366D6; */}
   color: black;
   text-align: left;
   align-items: center;
   grid-column-gap: 10px;
-  grid-template-columns: 1fr 3fr 2fr 1fr;
+  grid-template-columns: 1fr 3fr 2fr auto;
 `;
 
 const DeviceCardInfoStyle = styled.div`
@@ -66,13 +64,30 @@ const GridStyle = styled.div`
   grid-template-columns: 1fr; 
 `
 
+const ConnectionStatusStyle = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+`
+
 const FormStyle = styled.div`
   width: 100%;
   margin: 0 auto;
 `
 
+const modalCustomStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    padding: '40px',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
 const EditDeviceForm = (props) => {
-  let history = useHistory();
   const { _id, name, ipAddress, port, description } = props.device;
   const { register, handleSubmit, watch, errors, reset } = useForm();
   const onSubmit = (data, e) => {
@@ -82,7 +97,6 @@ const EditDeviceForm = (props) => {
       editDevice(data).then(res => {
         console.log(res);
         e.target.reset();
-        // history.push("/devices");
         props.onClose();
       });
     } catch{
@@ -101,27 +115,29 @@ const EditDeviceForm = (props) => {
           <input
             name="description"
             defaultValue={description}
-            ref={register({ required: true, maxLength: 50 })}
+            ref={register({
+              required: true, maxLength: 50,
+              message: "Invalid description"
+            })}
           />
 
           <label>IP address</label>
           <input
             name="ipAddress"
             defaultValue={ipAddress}
-            ref={register({ required: true, maxLength: 20 })}
+            ref={register({ required: true, maxLength: 20, message: "Invalid description" })}
           />
 
           <label>Port</label>
           <input
             name="port"
             defaultValue={port}
-            ref={register({ required: true, maxLength: 4 })}
+            ref={register({ required: true, maxLength: 4, message: "Port must not be larger than 4 digits" })}
           />
           <input type="submit" />
         </GridStyle>
       </form>
     </FormStyle>
-
   );
 }
 
@@ -131,12 +147,6 @@ export default function (props) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const { _id, name, lastModified, value, ipAddress, description, port } = props.device;
   let history = useHistory();
-  function editDeviceHandler() {
-    history.push({
-      pathname: "/device/edit",
-      state: { device: props.device }
-    });
-  }
 
   function deleteDeviceHandler() {
     try {
@@ -180,7 +190,9 @@ export default function (props) {
         </HeaderStyle>
         <div>{description}</div>
         <div />
-        <ConnectionStatus type='device' id={_id} />
+        <ConnectionStatusStyle>
+          <ConnectionStatus type='device' id={_id} />
+        </ConnectionStatusStyle>
       </DeviceCardHeaderGrid>
       <DeviceCardInfoStyle>
         <div>{ipAddress}</div>
@@ -200,25 +212,41 @@ export default function (props) {
         </div>
       </DeviceCardInfoStyle>
 
-      <Modal show={editModalVisible} onHide={closeEditModalHandler} >
+      <Modal
+        isOpen={editModalVisible}
+        onRequestClose={closeEditModalHandler}
+        style={modalCustomStyles}
+        contentLabel="Edit Modal"
+      >
         <EditDeviceForm device={props.device} onClose={closeEditModalHandler} />
       </Modal>
 
-      <Modal show={deleteModalVisible} onHide={closeDeleteModalHandler} onConfirm={confirmDeleteHandler} backdrop="static" keyboard={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Don't even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeDeleteModalHandler}>
-            Close
-          </Button>
-          <Button variant="danger" onClick={confirmDeleteHandler}>Confirm</Button>
-        </Modal.Footer>
+      <Modal
+        isOpen={deleteModalVisible}
+        onRequestClose={closeDeleteModalHandler}
+        style={modalCustomStyles}
+        contentLabel="Delete Modal"
+        classname="delete-device-modal"
+      >
+        <div>
+          <Row>
+            <Col xs={12} md={12}>
+              Confirm deleting the following device:
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6} md={4} style={{ fontWeight: 'bold' }}>
+              {props.device.name}
+            </Col>
+          </Row>
+        </div>
+        <Row>
+          <Col />
+          <Col xs={6} md={4}>
+            <Button variant="danger" onClick={confirmDeleteHandler}>Confirm</Button>
+          </Col>
+        </Row>
       </Modal>
-    </DeviceCardContainer>
+    </DeviceCardContainer >
   )
 }

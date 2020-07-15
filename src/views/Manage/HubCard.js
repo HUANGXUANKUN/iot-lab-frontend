@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
 import styled from 'styled-components';
 import { fetchAllDevices, deleteDevice } from "../../apis/device-api";
-import { fetchAllHubs } from "../../apis/hub-api";
+import { fetchAllHubs, createHub } from "../../apis/hub-api";
 import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
 import EditButton from "./EditButton";
@@ -78,6 +78,7 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: flex-end;
 `
+
 
 const HubCard = (props) => {
   const [hub, setHub] = useState(null);
