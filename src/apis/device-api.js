@@ -21,7 +21,7 @@ const fetchAllDevices = async () => {
   }
 }
 
-const fetchDevice = async (deviceId) => {
+const getDevice = async (deviceId) => {
   try {
     const link = API_KEY + "/device/get/"  + deviceId;
     const response = await fetch(link);
@@ -34,13 +34,13 @@ const fetchDevice = async (deviceId) => {
   }
 }
 
-const editDevice = async (device) => {
+const updateDevice = async (device) => {
   const { id, name, ipAddress, port, description } = device;
 
-  const link = API_KEY + "/device/edit";
+  const link = API_KEY + "/device/update";
 
   const requestOptions = {
-    method: 'POST',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       id: id,
@@ -85,7 +85,7 @@ const createDevice = async (device) => {
 const deleteDevice = async (deviceId) => {
   const link = API_KEY + "/device/delete/" + deviceId;
   const requestOptions = {
-    method: 'GET',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   };
 
@@ -121,10 +121,10 @@ const getCurrentDataSet = (historical) => {
 
 export {
   fetchAllDevices,
-  fetchDevice,
   getCurrentDataSet,
   createDevice,
-  editDevice,
+  updateDevice,
   deleteDevice,
+  getDevice,
 };
 

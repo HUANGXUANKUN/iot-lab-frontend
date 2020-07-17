@@ -23,9 +23,12 @@ const ButtonStyle = styled.div`
 `
 
 const FormGridStyle = styled.div`
+  align-content: center;
+  align-items:center;
   display: grid;
+  text-align: center; 
   padding: 10px;
-  font-size: 12pt;
+  font-size: 16pt;
   justify-items: center;
   grid-column-gap:10px;
   grid-row-gap:10px;
@@ -33,8 +36,7 @@ const FormGridStyle = styled.div`
 `
 
 const FormContainerStyle = styled.div`
-  max-width: 400px;
-  margin: 0 auto;
+  margin: 15px;
 `
 
 const modalCustomStyles = {
@@ -58,11 +60,8 @@ const NewHubForm = (props) => {
             createHub(data).then(res => {
                 console.log(res);
                 e.target.reset();
-                console.log("Closing...");
                 props.onClose();
-                console.log("getting new hubs data...");
                 props.onSubmitNewHub();
-                console.log("Done...");
             });
         } catch{
             console.log("Fail creating hub");
@@ -122,10 +121,8 @@ export default function (props) {
         try {
             fetchAllHubs().then(res => { 
                 setHubs(res);
-                console.log("Hubs data: ", res);
              });
         } catch{
-            console.log("fail fetching data");
             window.alert("fail fetching data")
         }
     }

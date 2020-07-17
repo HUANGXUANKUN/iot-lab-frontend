@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
 import styled from 'styled-components';
-import { fetchAllDevices, deleteDevice } from "../../apis/device-api";
+import { deleteDevice, getDevice } from "../../apis/device-api";
 import LinkButton from "../../components/LinkButton";
-import Section from "../../components/Section";
 import ConnectionStatus from '../../components/ConnectionStatusPanel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
-import { editDevice } from "../../apis/device-api";
+import { updateDevice } from "../../apis/device-api";
 import Modal from 'react-modal';
+import LoadingSection from '../../components/LoadingSection';
 
 const DeviceCardContainer = styled.div`
   background-color: #FFFFFF; 
@@ -71,8 +70,7 @@ const ConnectionStatusStyle = styled.div`
 `
 
 const FormStyle = styled.div`
-  width: 100%;
-  margin: 0 auto;
+  margin: 15px;
 `
 
 const modalCustomStyles = {
@@ -94,10 +92,11 @@ const EditDeviceForm = (props) => {
     data.id = _id;
     console.log(data);
     try {
-      editDevice(data).then(res => {
+      updateDevice(data).then(res => {
         console.log(res);
         e.target.reset();
         props.onClose();
+        props.onUpdate();
       });
     } catch{
       console.log("Fail creating device.");
@@ -143,14 +142,29 @@ const EditDeviceForm = (props) => {
 
 export default function (props) {
   const [visible, setVisible] = useState(true);
+  const [device, setDevice] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const { _id, name, lastModified, value, ipAddress, description, port } = props.device;
-  let history = useHistory();
+
+  const updateDeviceHandler = () => {
+    console.log("Updating");
+    setDevice(null);
+    try {
+      getDevice(device._id).then(res => {
+        setDevice(res);
+      });
+    } catch{
+      console.log("fail updating device");
+    }
+  }
+
+  useEffect(() => {
+    setDevice(props.device);
+  }, [])
 
   function deleteDeviceHandler() {
     try {
-      deleteDevice(_id).then(() => {
+      deleteDevice(device._id).then(() => {
         setVisible(false);
       }
       )
@@ -181,23 +195,30 @@ export default function (props) {
     setDeleteModalVisible(false);
   }
 
-  return (
+  if (device === null) {
+    return (
+      <DeviceCardContainer>
+        <LoadingSection />
+      </DeviceCardContainer>
+    )
+  }
+  else return (
     visible &&
     <DeviceCardContainer>
       <DeviceCardHeaderGrid>
         <HeaderStyle>
-          <LinkButton link={`/device/${_id}`} text={name}></LinkButton>
+          <LinkButton link={`/device/${device._id}`} text={device.name}></LinkButton>
         </HeaderStyle>
-        <div>{description}</div>
+        <div>{device.description}</div>
         <div />
         <ConnectionStatusStyle>
-          <ConnectionStatus type='device' id={_id} />
+          <ConnectionStatus type='device' id={device._id} />
         </ConnectionStatusStyle>
       </DeviceCardHeaderGrid>
       <DeviceCardInfoStyle>
-        <div>{ipAddress}</div>
-        <div>port: {port}</div>
-        <div>Last Modified: {getLocalDateTimeString(lastModified)}</div>
+        <div>{device.ipAddress}</div>
+        <div>port: {device.port}</div>
+        <div>Last Modified: {getLocalDateTimeString(device.lastModified)}</div>
         <div />
         <div>
           {/* <IconButton onClick={deleteDeviceHandler} aria-label="delete">
@@ -218,7 +239,7 @@ export default function (props) {
         style={modalCustomStyles}
         contentLabel="Edit Modal"
       >
-        <EditDeviceForm device={props.device} onClose={closeEditModalHandler} />
+        <EditDeviceForm device={device} onClose={closeEditModalHandler} onUpdate={updateDeviceHandler} />
       </Modal>
 
       <Modal
@@ -228,25 +249,33 @@ export default function (props) {
         contentLabel="Delete Modal"
         classname="delete-device-modal"
       >
-        <div>
-          <Row>
-            <Col xs={12} md={12}>
-              Confirm deleting the following device:
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6} md={4} style={{ fontWeight: 'bold' }}>
-              {props.device.name}
-            </Col>
-          </Row>
-        </div>
-        <Row>
-          <Col />
-          <Col xs={6} md={4}>
-            <Button variant="danger" onClick={confirmDeleteHandler}>Confirm</Button>
-          </Col>
-        </Row>
+        <DeleteDeviceModalContent device={device} onClose={confirmDeleteHandler} />
       </Modal>
     </DeviceCardContainer>
+  )
+}
+
+const DeleteDeviceModalContent = (props) => {
+  return (
+    <>
+      <div>
+        <Row>
+          <Col xs={12} md={12}>
+            Confirm deleting the following device:
+      </Col>
+        </Row>
+        <Row>
+          <Col xs={6} md={4} style={{ fontWeight: 'bold' }}>
+            {props.device.name}
+          </Col>
+        </Row>
+      </div>
+      <Row>
+        <Col />
+        <Col xs={6} md={4}>
+          <Button variant="danger" onClick={props.onClose}>Confirm</Button>
+        </Col>
+      </Row>
+    </>
   )
 }

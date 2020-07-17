@@ -23,7 +23,7 @@ const HubList = (props) => {
     return (
       <Container className="Hubs Section">
         {props.hubs.map((hub) =>
-          <HubCard key={hub._id} hub={hub} devices={hub.devices} />
+          <HubCard key={hub._id} hub={hub} />
         )}
       </Container>
     )

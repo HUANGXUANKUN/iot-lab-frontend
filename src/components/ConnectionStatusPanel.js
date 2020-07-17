@@ -45,34 +45,58 @@ const ConnectionStatus = props => {
 
   function setConnection(isConnected) {
     if (isConnected) {
+      console.log("Connected!");
       setConnectionStatus('Connected');
     } else {
+      console.log("Disonnected!");
       setConnectionStatus('Disconnected');
     }
   }
 
   function ping() {
     setConnectionStatus('Loading');
-    let responseStatus = false;
     try {
       if (props.type === 'hub') {
-        pingHub(props.id).then(isConnected => {
-          if (!unmounted.current) setConnection(isConnected);
-        })
-      } else if (props.type === 'device') {
-        pingDevice(props.id).then(isConnected => {
-          if (!unmounted.current) setConnection(isConnected)
+        pingHub(props.id).then(res => {
+          if(res.status && res.status !== 200) setConnection(false);
+          else setConnection(true);
         });
       }
-    } catch{
-      console.log("fail to ping " + props.type + " with id = " + props.id);
-      setConnectionStatus('Disconnected');
+      else {
+        pingDevice(props.id).then(res => {
+          if(res.status && res.status !== 200) setConnection(false);
+          else setConnection(true);
+        });
+      }
+    } catch (err) {
+      console.log("err!");
+      console.log("Error! fail to ping " + props.type + " with id = " + props.id);
+      setConnection(false);
     }
   }
 
+  // try {
+  //   if (props.type === 'hub') {
+  //     pingHub(props.id).then(isConnected => {
+  //       // if (!unmounted.current) setConnection(isConnected);
+  //       console.log("hub connection: ", isConnected);
+  //       setConnection(isConnected);
+  //     })
+  //   } else if (props.type === 'device') {
+  //     pingDevice(props.id).then(isConnected => {
+  //       // if (!unmounted.current) setConnection(isConnected)
+  //       console.log("device connection: ", isConnected);
+  //       setConnection(isConnected)
+  //     });
+  //   }
+  // } catch{
+  //   console.log("fail to ping " + props.type + " with id = " + props.id);
+  //   setConnectionStatus('Disconnected');
+  // }
+
   useEffect(() => {
     setConnectionStatus('Loading');
-    // ping();
+    ping();
     return () => { unmounted.current = true }
   }, [])
 

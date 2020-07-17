@@ -16,9 +16,7 @@ import { useAuth } from './assets/hooks/auth-hook';
  */
 const Main = React.lazy(() => import('./views/Main'))
 const Manage = React.lazy(() => import('./views/Manage'))
-const NewDevice = React.lazy(() => import('./views/NewDevice'))
 const NewHub = React.lazy(() => import('./views/NewHub'))
-const EditDevice = React.lazy(() => import('./views/EditDevice'))
 const Authentication = React.lazy(() => import('./views/Authentication'))
 const Device = React.lazy(() => import('./views/Device'))
 const Network = React.lazy(() => import('./views/Network'))
@@ -40,14 +38,8 @@ const App = () => {
         <Route path="/" exact>
           <Main />
         </Route>
-        <Route path="/device/new" exact>
-          <NewDevice />
-        </Route>
         <Route path="/hub/new" exact>
           <NewHub />
-        </Route>
-        <Route path="/device/edit" exact>
-          <EditDevice />
         </Route>
         <Route path="/device/:deviceId" exact>
           <Device />
@@ -58,7 +50,7 @@ const App = () => {
         <Route path="/network" exact>
           <Network />
         </Route>
-        <Redirect to="/devices" />
+        <Redirect to="/network" />
       </Switch>
   } else {
     // Visitors are only allowed to access home page and login page

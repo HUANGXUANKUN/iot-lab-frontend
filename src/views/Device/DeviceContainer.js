@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { fetchDevice } from "../../apis/device-api";
+import { getDevice } from "../../apis/device-api";
 import { pingDevice } from "../../apis/command-api";
 import DeviceInfoSection from "./DeviceInfoSection";
 import DataChart from './DataChart';
 import CommandContainer from './CommandContainer';
+import LoadingPage from '../../components/LoadingPage';
 
 let globalSeconds = 0;
 
@@ -41,7 +42,7 @@ export default function () {
 
   useEffect(() => {
     try {
-      fetchDevice(deviceId).then((res) => {
+      getDevice(deviceId).then((res) => {
         if (device) {
           const lastModified = device.lastModified;
           console.log("current last modified: ", lastModified);
@@ -64,7 +65,7 @@ export default function () {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(seconds=>seconds+5);
+      setSeconds(seconds => seconds + 5);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -72,7 +73,7 @@ export default function () {
   useEffect(() => {
     try {
 
-      fetchDevice(deviceId).then((res) => {
+      getDevice(deviceId).then((res) => {
         setDevice(res);
       })
     } catch{
@@ -82,7 +83,7 @@ export default function () {
 
   const setDeviceHandler = () => {
     pingDevice(deviceId);
-    fetchDevice(deviceId).then((res) => {
+    getDevice(deviceId).then((res) => {
       setDevice(res);
       setLastFetchSeconds(0);
     });
@@ -101,7 +102,8 @@ export default function () {
       </>
     )
   }
-  return (
-    <div>Loading device data</div>
-  )
+  else
+    return (
+      <LoadingPage />
+    )
 }

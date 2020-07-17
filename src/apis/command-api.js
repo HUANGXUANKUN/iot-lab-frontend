@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
 const MAX_SELECTED = 10;
@@ -28,44 +29,48 @@ const sendCommand = async (type, content, deviceId) => {
 const pingDevice = async (id) => {
   const link = API_KEY + "/command/device/ping/" + id;
   console.log("pinging device with id: " + id);
-  const requestOptions = {
-    method: 'GET',
-  };
-  let response;
   try {
-    const response = await fetch(link, requestOptions);
-    if(response.status === 200){
-      console.log("Ping successfully! Device is connected!")
-      return true;
-    }else{
-      console.log("Fail connecting device!");
-      return false;
+    let res = await axios({
+      method: 'get',
+      url: link,
+      timeout: 5000,
+    });
+    console.log("res: ", res);
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    console.log("error code: ", error.code);
+    if (error.code === "ECONNABORTED") {
+      console.log("Time out error!!");
+      return { status: 408 };
     }
-  } catch (err) {
-    console.log("Fail connecting device!");
-    return false;
+    else {
+      return { status: 500 };
+    }
   }
 }
 
 const pingHub = async (id) => {
   const link = API_KEY + "/command/hub/ping/" + id;
   console.log("pinging hub with id: " + id);
-  const requestOptions = {
-    method: 'GET',
-  };
-  let response;
   try {
-    const response = await fetch(link, requestOptions);
-    if(response.status === 200){
-      console.log("Ping successfully! Hub is connected!")
-      console.log(response);
-      return true;
-    }else{
-      return false;
+    let res = await axios({
+      method: 'get',
+      url: link,
+      timeout: 5000,
+    });
+    console.log("res: ", res);
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    console.log("error code: ", error.code);
+    if (error.code === "ECONNABORTED") {
+      console.log("Time out error!!");
+      return { status: 408 };
     }
-  } catch (err) {
-    console.log("Fail connecting hub!");
-    return false;
+    else {
+      return { status: 500 };
+    }
   }
 }
 
