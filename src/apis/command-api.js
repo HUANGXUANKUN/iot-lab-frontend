@@ -7,7 +7,7 @@ const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
 const MAX_SELECTED = 10;
 const TIME_UNITS = 10;
 
-const sendCommand = async (type, content, deviceId) => {
+const sendCommand = async (type, content, hubId) => {
   const link = API_KEY + "/command/create";
   console.log("sending command " + type + ": " + content);
   const requestOptions = {
@@ -16,7 +16,7 @@ const sendCommand = async (type, content, deviceId) => {
     body: JSON.stringify({
       type: type,
       content: content,
-      deviceId: deviceId
+      hubId: hubId
     })
   };
   try {

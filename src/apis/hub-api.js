@@ -4,9 +4,6 @@ import React, { useRef, useState, useEffect } from 'react';
 
 const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
 
-const MAX_SELECTED = 10;
-const TIME_UNITS = 10;
-
 const fetchAllHubs =  async () => {
   try {
     const link = API_KEY + "/hub/hubs";
