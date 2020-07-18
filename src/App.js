@@ -6,6 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Appbar from './components/Appbar';
 import BackgroundPage from './components/BackgroundPage';
 import LoadingPage from './components/LoadingPage';
 import { AuthContext } from './assets/contexts/auth-context';
@@ -16,8 +17,8 @@ import { useAuth } from './assets/hooks/auth-hook';
  */
 const Main = React.lazy(() => import('./views/Main'))
 const Manage = React.lazy(() => import('./views/Manage'))
-const NewHub = React.lazy(() => import('./views/NewHub'))
 const Authentication = React.lazy(() => import('./views/Authentication'))
+const TableView = React.lazy(() => import('./views/TableView'))
 const Device = React.lazy(() => import('./views/Device'))
 const Network = React.lazy(() => import('./views/Network'))
 const Error = React.lazy(() => import('./views/Error'))
@@ -32,14 +33,11 @@ const App = () => {
     { console.log("Has token") }
     routes =
       <Switch>
-        <Route path="/devices" exact>
+        <Route path="/manage" exact>
           <Manage />
         </Route>
         <Route path="/" exact>
           <Main />
-        </Route>
-        <Route path="/hub/new" exact>
-          <NewHub />
         </Route>
         <Route path="/device/:deviceId" exact>
           <Device />
@@ -50,7 +48,10 @@ const App = () => {
         <Route path="/network" exact>
           <Network />
         </Route>
-        <Redirect to="/network" />
+        <Route path="/table" exact>
+          <TableView />
+        </Route>
+        <Redirect to="/table" />
       </Switch>
   } else {
     // Visitors are only allowed to access home page and login page
@@ -81,7 +82,8 @@ const App = () => {
     >
       <Router>
         <BackgroundPage>
-          <Navbar />
+          {/* <Navbar /> */}
+          <Appbar />
           <main>
             <Suspense fallback={<LoadingPage />}>
               {routes}
