@@ -6,6 +6,8 @@ const SectionStyle = styled.div`
   ${whiteBackgroundColor}
   padding: 10px;
   margin: 10px;
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #e3dada;
 `
 export default function Section(props) {
   return (
