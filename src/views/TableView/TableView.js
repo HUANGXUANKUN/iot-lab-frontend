@@ -17,13 +17,13 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 const { SearchBar } = Search;
 const headerSortingStyle = { backgroundColor: '#F1F8FF' };
 
-function dateTimeFormatter(cell, row) {
+const dateTimeFormatter=(cell, row) =>{
   return (
     <div> {getLocalDateTimeString(cell)}</div>
   );
 }
 
-function HeaderFormatter(column, colIndex, { sortElement, filterElement }) {
+const headerFormatter = (column, colIndex, { sortElement, filterElement }) =>{
   console.log("sortElement,", sortElement);
 
   return (
@@ -37,6 +37,13 @@ function HeaderFormatter(column, colIndex, { sortElement, filterElement }) {
   );
 }
 
+const sortCaret = (order, column) => {
+  if (!order) return (<span><ArrowDropUpIcon /><ArrowDropDownIcon /></span>);
+  else if (order === 'asc') return (<ArrowDropUpIcon />);
+  else if (order === 'desc') return (<ArrowDropDownIcon />);
+  return null;
+}
+
 const columns = [
   {
     dataField: 'name',
@@ -44,13 +51,8 @@ const columns = [
     sort: true,
     filter: textFilter(),
     headerSortingStyle,
-    headerFormatter: HeaderFormatter,
-    sortCaret: (order, column) => {
-      if (!order) return (<span><ArrowDropUpIcon /><ArrowDropDownIcon /></span>);
-      else if (order === 'asc') return (<ArrowDropUpIcon />);
-      else if (order === 'desc') return (<ArrowDropDownIcon />);
-      return null;
-    }
+    headerFormatter,
+    sortCaret
   },
   {
     dataField: 'description',
@@ -58,7 +60,8 @@ const columns = [
     sort: true,
     filter: textFilter(),
     headerSortingStyle,
-    headerFormatter: HeaderFormatter,
+    headerFormatter,
+    sortCaret,
   },
   {
     dataField: '_id',
@@ -66,7 +69,8 @@ const columns = [
     sort: true,
     filter: textFilter(),
     headerSortingStyle,
-    headerFormatter: HeaderFormatter,
+    headerFormatter,
+    sortCaret,
   },
   {
     dataField: 'lastModified',
@@ -75,19 +79,22 @@ const columns = [
     sort: true,
     filter: textFilter(),
     headerSortingStyle,
-    headerFormatter: HeaderFormatter,
+    headerFormatter,
+    sortCaret,
   },
   {
     dataField: 'ipAddress',
     text: 'IP',
     filter: textFilter(),
     sort: true,
-    headerFormatter: HeaderFormatter,
+    sortCaret: sortCaret,
+    headerSortingStyle,
+    headerFormatter,
   },
   {
     dataField: 'port',
     text: 'port',
-    headerFormatter: HeaderFormatter,
+    headerFormatter,
   },
 ];
 
@@ -109,13 +116,12 @@ const TableView = (props) => {
   useEffect(() => {
     try {
       fetchAllHubs().then(res => {
-        // process data
         setLoadingMessage("Loading hubs data...");
         setData(res);
       });
     } catch{
       setLoadingHasFailed(true);
-      console.log("fail fetching data");
+      alert("fail fetching data");
     }
   }, []);
 
