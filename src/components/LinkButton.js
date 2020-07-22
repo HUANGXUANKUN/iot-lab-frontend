@@ -11,7 +11,7 @@ function LinkButton(props){
 
   return (
     <Button color="inherit" onClick={handleClick}>
-      {props.text} 
+      {props.children}
     </Button>
   );
 }

@@ -105,7 +105,7 @@ const ConnectionStatus = props => {
       type="TailSpin"
       color="#24292E"
       height={15}
-      width={15} />;
+      width={15} />
   </SpinnerStyle>
 
   if (connectionStatus === "Connected") {

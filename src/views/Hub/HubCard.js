@@ -16,15 +16,11 @@ import { Container, Col, Row, Button } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 
 const HubCardStyle = styled.div`
-  background-color: #F1F8FF; 
-  border-radius: 10px 10px 10px 10px;
-  border: 1px solid #C8E1FF;
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:10px;
-  margin-bottom:20px;
+background-color: #F1F8FF; 
+  overflow: auto; 
+  height:100%;
   &:hover{
-    background-color:#F1F8FF;
+    background-color:#cae3f7;
     transition:none;
   }
 `
@@ -296,8 +292,7 @@ export default function HubCard(props) {
   else {
     console.log("current devices: ", hub.devices)
     return (
-      visible && 
-      <HubCardStyle>
+      visible && <HubCardStyle>
         <HubCardHeaderStyle>
           <HeaderStyle>{hub.name}</HeaderStyle>
           <HubCardDescription>{hub.description}</HubCardDescription>
@@ -337,7 +332,6 @@ export default function HubCard(props) {
           <AddModalContent hub={hub} onClose={closeAddModalHandler} onUpdate={updateHubHandler} />
         </Modal>
       </HubCardStyle>
-
     )
   }
 }

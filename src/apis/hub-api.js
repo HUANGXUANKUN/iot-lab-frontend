@@ -33,10 +33,9 @@ const createHub = async (hub) => {
   try {
     const response = await fetch(link, requestOptions);
     if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
-    return response;
+    return response.json();
   } catch (err) {
-    console.log(err);
-    console.log("Fail to send data");
+    console.error(err);
     throw err;
   }
 }

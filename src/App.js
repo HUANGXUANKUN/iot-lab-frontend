@@ -5,7 +5,6 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import Appbar from './components/Appbar';
 import BackgroundPage from './components/BackgroundPage';
 import LoadingPage from './components/LoadingPage';
@@ -20,9 +19,9 @@ const Manage = React.lazy(() => import('./views/Manage'))
 const Authentication = React.lazy(() => import('./views/Authentication'))
 const TableView = React.lazy(() => import('./views/TableView'))
 const Device = React.lazy(() => import('./views/Device'))
+const Hub = React.lazy(() => import('./views/Hub'))
 const Network = React.lazy(() => import('./views/Network'))
 const Error = React.lazy(() => import('./views/Error'))
-
 
 const App = () => {
   const { token, login, logout, userId, userName } = useAuth();
@@ -42,6 +41,9 @@ const App = () => {
         <Route path="/device/:deviceId" exact>
           <Device />
         </Route>
+        <Route path="/hub/:hubId" exact>
+          <Hub />
+        </Route>
         <Route path="/error" exact>
           <Error />
         </Route>
@@ -51,7 +53,7 @@ const App = () => {
         <Route path="/table" exact>
           <TableView />
         </Route>
-        <Redirect to="/table" />
+        <Redirect to="/network" />
       </Switch>
   } else {
     // Visitors are only allowed to access home page and login page

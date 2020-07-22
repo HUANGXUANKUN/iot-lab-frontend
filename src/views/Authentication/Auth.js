@@ -43,6 +43,7 @@ const FormStyle = styled.div`
   margin-right: auto;
   margin-top: 50px;
   margin-bottom: 50px;
+  text-align: center;
 `;
 
 
@@ -70,26 +71,6 @@ const Auth = (props) => {
 
   const onSubmitHandler = async (data, event) => {
     event.preventDefault();
-    console.log("submitting...");
-    // const link = `${process.env.REACT_APP_BACKEND_API_KEY}/user/login`;
-    // const requestOptions = {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     email: data.email,
-    //     password: data.password,
-    //   }),
-    // };
-    // console.log("submitting...2");
-    // try {
-    //   const response = await fetch(link, requestOptions);
-    //   console.log("gotten response,", response);
-    //   return response;
-    // } catch (err) {
-    //   // console.log("fetch data failed!", err);
-    //   throw err;
-    // }
-  
     try {
       const responseData = await sendRequest(
         `${process.env.REACT_APP_BACKEND_API_KEY}/user/login`,
@@ -109,28 +90,12 @@ const Auth = (props) => {
      }
   };
 
-  const onSubmit = (data, e) => {
-    e.preventDefault();
-    console.log("data", data);
-    try {
-      onSubmitHandler(data);
-      // onSubmitHandler(data).then((response) => {
-      //   console.log("response is:", response.json());
-      //   if(!response.ok) throw new Error(response.json());
-      //   const responseData = response.json();
-      //   auth.login(responseData.userId, responseData.userName, responseData.token);
-      // });
-    } catch (err) {
-      console.log("fail to login: ", err);
-      alert("Login fails! Please try again!");
-    }
-  }; //form submit function which will invoke after successful validation
 
-  // {/* <form onSubmit={onSubmitHandler}> */}
   return (
     <Form>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <FormStyle>
+          <h1>Login</h1>
           <TextField
             inputRef={register({ required: true })}
             name="email"
@@ -149,6 +114,7 @@ const Auth = (props) => {
               error
               inputRef={register({ required: true })}
               name="password"
+              placeholder="password"
               id="standard-adornment-amount"
               value={values.amount}
               type={values.showPassword ? "text" : "password"}

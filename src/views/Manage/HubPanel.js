@@ -5,7 +5,6 @@ import { fetchAllDevices } from "../../apis/device-api";
 import { fetchAllHubs } from "../../apis/hub-api";
 import LinkButton from "../../components/LinkButton";
 import Section from "../../components/Section";
-import EditButton from "./EditButton";
 import HubCard from "./HubCard";
 import LoadingPage from '../../components/LoadingPage';
 

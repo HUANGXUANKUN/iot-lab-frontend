@@ -1,17 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import EditIcon from '@material-ui/icons/Edit';
+import {useHistory} from 'react-router-dom';
 
-const ButtonStyle = styled.div`
+const NewButton = styled.div`
   position:relative;
   display:inline-block;
-  justify-content: center;
   padding:5px 16px;
   min-width: 30px;
-  max-width: 25px;
-  min-height: 10px;
-  max-height: 18px;
   font-size:14px;
   font-weight:500;
   line-height:20px;
@@ -24,11 +19,11 @@ const ButtonStyle = styled.div`
   -moz-appearance:none;
   appearance:none;
   color:#fff;
-  background-color:#807979;
+  background-color:#2ea44f;
   border-color:rgba(27,31,35,.15);
   box-shadow:0 1px 0 rgba(27,31,35,.1),inset 0 1px 0 hsla(0,0%,100%,.03);
   &:hover {
-    background-color:#524d4d;
+    background-color:#2c974b;
     transition-duration:.1s;
   }
   &:focus{box-shadow:0 0 0 3px rgba(46,164,79,.4);}
@@ -38,26 +33,16 @@ const ButtonStyle = styled.div`
     border-color:rgba(27,31,35,.15);
   }
   &: active{
-    background-color:#2e2c2c;
+    background-color:#2a8f47;
     box-shadow:inset 0 1px 0 rgba(20,70,32,.2);
     transition:none;
   }
 `
 
 export default function (props) {
-  let history = useHistory();
-
-  function handleClick() {
-    history.push({
-      pathname: props.link,
-      state: { device: props.device }
-    });
-  }
-
   return (
-    <ButtonStyle onClick={handleClick}>
-      Edit
-      <EditIcon />
-    </ButtonStyle>
+    <NewButton onClick = {props.onClick}>
+      {props.children}
+    </NewButton>
   );
 }

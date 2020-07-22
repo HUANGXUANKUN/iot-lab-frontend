@@ -1,0 +1,29 @@
+.parent-expand-foo {
+  background-color: #c7dae8;
+  /* background-color: red; */
+  /* text-align: center; */
+}
+
+.expanding-foo{
+  background-color: #F1F8FE;
+}
+
+
+tr:hover {
+  background-color: #8ba7ba;
+}
+
+/* .react-bootstrap-table {
+  height: 80vh;
+  overflow: auto;
+} */
+
+.MainHeader {
+  background-color:#F1F8FE;
+}
+
+.MainTable {
+  height: 90vh;
+  overflow: auto;
+}
+

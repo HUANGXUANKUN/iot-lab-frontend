@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
-import LoadingSection from '../../components/LoadingSection';
+import LoadingSection from "../../components/LoadingSection";
 
 const CurrentSelectedStyled = styled.div`
   text-align: center;
-`
+`;
 const Container = styled.h2`
-  width:300px;
-  margin:10px;
-`
+  width: 350px;
+  margin: 10px;
+`;
 
 const SectionStyle = styled.div`
   display: grid;
-  text-align: left; 
+  text-align: left;
   font-size: 12pt;
   justify-items: left;
-  grid-column-gap:10px;
-  grid-row-gap:10px;
-  grid-template-columns: 1fr 1fr; 
-`
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  grid-template-columns: 1fr 1fr;
+`;
 const DateStyle = styled.div`
-  text-align: left; 
+  text-align: left;
   font-style: italic;
   align-content: center;
   font-size: 10pt;
   justify-items: left;
-`
+`;
 const TitleStyle = styled.div`
   font-weight: bold;
-`
+`;
 
 const Information = (props) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,24 +37,16 @@ const Information = (props) => {
 
   useEffect(() => {
     setIsLoading(false);
-  }, [props])
+  }, [props]);
 
   let deviceList;
-  if (isLoading)
-    return <LoadingSection />
-  else if (props.node === null)
-    return <Container></Container>
+  if (isLoading) return <LoadingSection />;
+  else if (props.node === null) return <Container></Container>;
   else
-    // if (props.node.type === "hub") {
-    //   deviceList = (<>
-    //     <TitleStyle>Devices:</TitleStyle>
-    //     {props.node.devices.map(device => <div>{device.name}</div>)}
-    //   </>);
-    // }
     return (
       <Container>
         <CurrentSelectedStyled> {props.node.id} </CurrentSelectedStyled>
-        {props.node.type !== "center" &&
+        {props.node.type !== "center" && (
           <SectionStyle>
             <TitleStyle>Description:</TitleStyle>
             <div>{props.node.description}</div>
@@ -66,25 +58,22 @@ const Information = (props) => {
             <div>{props.node.port}</div>
             <TitleStyle>Last-Modified:</TitleStyle>
             <div>{getLocalDateTimeString(props.node.lastModified)}</div>
-            {
-              props.node.type === "hub" &&
+            {props.node.type === "hub" && (
               <>
                 <TitleStyle>Devices:</TitleStyle>
                 <div>
-                  {props.node.devices.map(device => <div key = {"node-device-"+device._id}>{device.name}</div>)}
+                  {props.node.devices.map((device) => (
+                    <div key={"node-device-" + device._id}>{device.name}</div>
+                  ))}
                 </div>
               </>
-            }
+            )}
           </SectionStyle>
-        }
+        )}
       </Container>
-    )
-}
+    );
+};
 
 export default function (props) {
-  return (
-    <>
-      <Information node={props.node} />
-    </>
-  )
+  return <Information node={props.node} />;
 }
