@@ -16,13 +16,10 @@ import { Container, Col, Row, Button } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 
 const HubCardStyle = styled.div`
-background-color: #F1F8FF; 
+  width:100%;
+  background-color: #F1F8FF; 
   overflow: auto; 
   height:100%;
-  &:hover{
-    background-color:#cae3f7;
-    transition:none;
-  }
 `
 
 const HubCardHeaderStyle = styled.div`
@@ -298,7 +295,7 @@ export default function HubCard(props) {
           <HubCardDescription>{hub.description}</HubCardDescription>
           <div>
             <ConnectionStatusStyle>
-              <ConnectionStatus type='hub' id={hub._id} />
+              <ConnectionStatus type='hub' hub={hub} />
             </ConnectionStatusStyle>
           </div>
         </HubCardHeaderStyle>
@@ -318,7 +315,7 @@ export default function HubCard(props) {
             </IconButton>
           </ButtonGroup>
         </HubCardInfoStyle>
-        {hub.devices.map((device) => <DeviceCard key={device._id} device={device} />)}
+        {hub.devices.map((device) => <DeviceCard key={device._id} hub={hub}device={device} />)}
 
         <Modal isOpen={deleteModalVisible} onRequestClose={closeDeleteModalHandler} style={modalCustomStyles}>
           <DeleteModalContent hub={hub} onClose={confirmDeleteHandler} />

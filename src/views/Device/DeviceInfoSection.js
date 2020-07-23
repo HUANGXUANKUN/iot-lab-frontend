@@ -39,7 +39,7 @@ export default function (props) {
     <Section>
       <CurrentSelectedStyled>
         {props.device.name}
-        <ConnectionStatusPanel type="device" id={props.device._id} />
+        {/* <ConnectionStatusPanel type="device" hub={props.device._id} /> */}
       </CurrentSelectedStyled>
       <SectionStyle>
         <TitleStyle>Value: </TitleStyle>

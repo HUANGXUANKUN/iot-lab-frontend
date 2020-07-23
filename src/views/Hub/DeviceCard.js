@@ -222,7 +222,11 @@ export default function (props) {
             <div>{device.description}</div>
             <div />
             <ConnectionStatusStyle>
-              <ConnectionStatus type="device" id={device._id} />
+              <ConnectionStatus
+                type="device"
+                hub={props.hub}
+                device={props.device}
+              />
             </ConnectionStatusStyle>
           </DeviceCardHeaderGrid>
           <DeviceCardInfoStyle>

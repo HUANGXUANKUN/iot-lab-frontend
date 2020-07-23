@@ -342,7 +342,7 @@ export default function () {
     );
   };
 
-  if (data === null) return <LoadingPage />;
+  if (data === null) return <LoadingPage message="Loading network diagram..."/>;
   else
     return (
       <ContainerStyle>

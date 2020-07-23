@@ -5,7 +5,7 @@ import { getDevice } from "../../apis/device-api";
 import { pingDevice } from "../../apis/command-api";
 import DeviceInfoSection from "./DeviceInfoSection";
 import DataChart from './DataChart';
-import CommandContainer from './CommandContainer';
+// import CommandContainer from './CommandContainer';
 import LoadingPage from '../../components/LoadingPage';
 
 let globalSeconds = 0;
@@ -97,7 +97,7 @@ export default function () {
           <DataChart device={device} lastFetchSeconds={lastFetchSeconds} />
         </InfoContainerGrid>
         <CommandContainerGrid>
-          <CommandContainer device={device} />
+          {/* <CommandContainer device={device} /> */}
         </CommandContainerGrid>
       </>
     )

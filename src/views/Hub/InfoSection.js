@@ -5,11 +5,15 @@ import Section from '../../components/Section';
 import ConnectionStatusPanel from '../../components/ConnectionStatusPanel';
 import Typography from '@material-ui/core/Typography';
 
+const Container = styled.div`
+  width:100%;
+`
+
 const CurrentSelectedStyled = styled.h2`
   text-align: center;
   display: grid;
   grid-template-columns: 1fr 1fr; 
-`
+` 
 
 const SectionStyle = styled.div`
   display: grid;
@@ -45,10 +49,10 @@ export default function (props) {
   const hub = props.hub;
 
   return (
-    <div>
+    <Container>
       <CurrentSelectedStyled>
         {hub.name}
-        <ConnectionStatusPanel type="hub" id={hub.id} />
+        <ConnectionStatusPanel type="hub" hub={hub} />
       </CurrentSelectedStyled>
       <SectionStyle>
         <TitleStyle>Description: </TitleStyle>
@@ -60,6 +64,6 @@ export default function (props) {
         <TitleStyle>Last Modified: </TitleStyle>
         <DateStyle>{getLocalDateTimeString(hub.lastModified)}</DateStyle>
       </SectionStyle>
-      </div>
+      </Container>
   )
 }

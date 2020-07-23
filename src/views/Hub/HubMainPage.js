@@ -23,10 +23,19 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
+  paperLeft: {
     // padding: theme.spacing(2),
     margin: "10px",
     height: "90vh",
+    minWidth: "350px",
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  },
+  paperRight: {
+    // padding: theme.spacing(2),
+    margin: "10px",
+    height: "90vh",
+    minWidth:window.innerWidth-390,
     textAlign: "left",
     color: theme.palette.text.secondary,
   },
@@ -53,10 +62,10 @@ export default function () {
   } else {
     return (
       <ContainerStyle>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperLeft}>
             <InfoSection hub={hub} />
           </Paper>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperRight}>
             <HubCard hub={hub} />
           </Paper>
       </ContainerStyle>
