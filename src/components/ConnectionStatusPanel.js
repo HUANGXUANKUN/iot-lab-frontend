@@ -57,13 +57,13 @@ const ConnectionStatus = props => {
     setConnectionStatus('Loading');
     try {
       if (props.type === 'hub') {
-        pingHub(props.id).then(res => {
+        pingHub(props.hub).then(res => {
           if(res.status && res.status !== 200) setConnection(false);
           else setConnection(true);
         });
       }
       else {
-        pingDevice(props.id).then(res => {
+        pingDevice(props.hub, props.device).then(res => {
           if(res.status && res.status !== 200) setConnection(false);
           else setConnection(true);
         });
