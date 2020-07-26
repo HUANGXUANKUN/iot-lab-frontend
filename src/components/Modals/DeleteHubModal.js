@@ -22,12 +22,12 @@ const DeleteHubForm = (props) => {
   const deleteHubHandler = () => {
     try {
       console.log("Deleting Hub...");
-    //   deleteHub(props.hub._id).then((res) => {
-    //     props.onClose();
-    //     props.onSubmitForm();
-    //   });
+      deleteHub(props.hub._id).then((res) => {
         props.onClose();
         props.onSubmitForm();
+      });
+        // props.onClose();
+        // props.onSubmitForm();
     } catch {
       alert("Fail deleting hub!");
     }

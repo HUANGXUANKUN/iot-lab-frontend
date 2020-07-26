@@ -2,12 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import Loader from 'react-loader-spinner';
 
+const Container = styled.div`
+  position: relative;
+`
 
 const LoaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-self: center;
   margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+
+const CenterBlock = styled.div`
+  width: 500px;
+  height: 10em;
+  display: grid;
+  align-items: center;
+  justify-content: center;
 `
 
 export default function () {

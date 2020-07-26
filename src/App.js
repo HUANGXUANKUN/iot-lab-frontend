@@ -52,7 +52,7 @@ const App = () => {
         <Route path="/table" exact>
           <TableView />
         </Route>
-        <Redirect to="/hub/5f1077cf5dcee500171efd5b" />
+        <Redirect to="/hub/5f1077e65dcee500171efd5d" />
       </Switch>
     );
   } else {
@@ -84,7 +84,6 @@ const App = () => {
     >
       <Router>
         <BackgroundPage>
-          {/* <Navbar /> */}
           <Appbar />
           <main>
             <Suspense fallback={<LoadingPage />}>{routes}</Suspense>

@@ -1,69 +1,59 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import { getLocalDateTimeString } from '../../assets/util/dateTimeParser';
-import Section from '../../components/Section';
-import ConnectionStatusPanel from '../../components/ConnectionStatusPanel';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
+import Section from "../../components/Section";
+import ConnectionStatusPanel from "../../components/ConnectionStatusPanel";
+import Typography from "@material-ui/core/Typography";
 
-const Container = styled.div`
-  width:100%;
-`
-
-const CurrentSelectedStyled = styled.h2`
-  text-align: center;
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
-` 
+const HubHeader = styled.div`
+  font-size: 16px;
+  text-align: left;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 80px;
+`;
 
 const SectionStyle = styled.div`
   display: grid;
-  text-align: center; 
-  padding: 10px;
+  text-align: left;
   font-size: 12pt;
   justify-items: left;
-  grid-column-gap:10px;
-  grid-row-gap:10px;
-  grid-template-columns: 1fr 1fr; 
-`
+  align-items: center;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  grid-template-columns: 1fr 1fr;
+`;
 
-const DateStyle = styled.div`
-  text-align: left; 
-  font-style: italic;
-  align-content: center;
-  font-size: 10pt;
-  margin: 5px;
-  justify-items: left;
-`
-
-const TitleStyle = styled.div`
-  font-weight: bold;
-`
-
-const ButtonGroup = styled.div`
-  min-width: 200px;
-  justify-content: flex-end;
-  display: flex;
-  align-items: flex-end;
-`
 export default function (props) {
   const hub = props.hub;
 
   return (
-    <Container>
-      <CurrentSelectedStyled>
-        {hub.name}
+    <>
+      <HubHeader>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "250px",
+          }}
+        >
+          <h3>{hub.name}</h3>
+        </div>
         <ConnectionStatusPanel type="hub" hub={hub} />
-      </CurrentSelectedStyled>
+      </HubHeader>
       <SectionStyle>
-        <TitleStyle>Description: </TitleStyle>
+        <div>Description: </div>
         <div>{hub.description}</div>
-        <TitleStyle>IP Address: </TitleStyle>
+        <div>IP Address: </div>
         <div>{hub.ipAddress}</div>
-        <TitleStyle>Port: </TitleStyle>
+        <div>Port: </div>
         <div>{hub.port}</div>
-        <TitleStyle>Last Modified: </TitleStyle>
-        <DateStyle>{getLocalDateTimeString(hub.lastModified)}</DateStyle>
+        <div>Last Modified: </div>
+        <div>{getLocalDateTimeString(hub.lastModified)}</div>
       </SectionStyle>
-      </Container>
-  )
+    </>
+  );
 }

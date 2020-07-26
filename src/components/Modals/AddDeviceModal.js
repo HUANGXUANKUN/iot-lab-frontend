@@ -47,8 +47,8 @@ const AddDeviceForm = (props) => {
       createDevice(data).then(res => {
         console.log(res);
         e.target.reset();
+        props.onSubmitForm(res);
         props.onClose();
-        props.onUpdate();
       });
 
     } catch{
@@ -87,7 +87,9 @@ const AddDeviceForm = (props) => {
   );
 }
 
-const EditDeviceModal = (props) => {
+const AddDeviceModal = (props) => {
+
+  if(props.hub) console.log(props.hub);
   return (
     <Modal
       isOpen={props.isOpen}
@@ -103,4 +105,4 @@ const EditDeviceModal = (props) => {
   );
 };
 
-export default AddDeviceForm;
+export default AddDeviceModal;

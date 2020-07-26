@@ -44,6 +44,7 @@ const EditModalContent = (props) => {
     data.id = _id;
     updateHub(data)
       .then((res) => {
+        console.log("updating hub: ",res);
         props.onClose();
         props.onSubmitForm(res);
       })

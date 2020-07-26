@@ -75,7 +75,7 @@ const NewHubForm = (props) => {
       .then((res) => {
         e.target.reset();
         props.onClose();
-        props.onSubmitNewHub(res.hub);
+        props.onSubmitNewHub(res);
       })
       .catch((err) => {
         alert(err.message);

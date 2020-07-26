@@ -23,29 +23,47 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import LoadingPage from "../../components/LoadingPage";
-import { fetchAllHubs } from "../../apis/hub-api";
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
-import Section from "../../components/Section";
 import NewButton from "../../components/NewButton";
 import truncate from "../../assets/util/truncate";
-import "./DeviceTable.css";
 import EditDeviceModal from "../../components/Modals/EditDeviceModal";
-import { Modal } from "@material-ui/core";
 import DeleteDeviceModal from "../../components/Modals/DeleteDeviceModal";
-import DeleteHubModal from "../../components/Modals/DeleteHubModal";
-import EditHubModal from "../../components/Modals/EditHubModal";
-import { editDevice } from "../../apis/device-api";
+import AddDeviceModal from "../../components/Modals/AddDeviceModal";
 
-const SectionStyle = styled.div`
-  padding: 20px;
+
+const NewButtonStyle = styled.div`
+  margin: 10px 10px;
+  width: 100px;
+`;
+
+const ContainerStyle = styled.div`
+  /* border: 2px solid yellow; */
+  display: flex;
+  flex-direction: column;
+  /* height: ${(props) => window.innerHeight - 100}px; */
+`;
+
+const PaperUpperStyle = styled.div`
+  /* border: 2px solid purple; */
+  background-color: white;
+  height: 00px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const PaperBottomStyle = styled.div`
+  /* border: 2px solid green; */
+  background-color: white;
+  flex-grow: 1;
+  margin-top: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+  overflow: auto;
 `;
 
 const descriptionFormatter = (cell, row) => {
   return (
     <Tooltip title={cell} aria-label={"tooltip-device-description" + row._id}>
-      <Typography style={{ fontSize: "13px" }}>
-        {truncate(cell, 30, true)}
-      </Typography>
+      <Typography>{truncate(cell, 30, true)}</Typography>
     </Tooltip>
   );
 };
@@ -102,10 +120,6 @@ const sortCaret = (order, column) => {
   return null;
 };
 
-const afterSearch = (newResult) => {
-  console.log(newResult);
-};
-
 const defaultSorted = [
   {
     dataField: "id",
@@ -113,7 +127,7 @@ const defaultSorted = [
   },
 ];
 
-const ExpandedRow = (props) => {
+const DevicePage = (props) => {
   const [hub, setHub] = useState(null);
   const [devices, setDevices] = useState(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
@@ -128,11 +142,13 @@ const ExpandedRow = (props) => {
 
   const showEditDeviceModalHandler = () => setEditDeviceModalVisible(true);
   const closeEditDeviceModalHandler = () => setEditDeviceModalVisible(false);
+
   const showDeleteDeviceModalHandler = () => setDeleteDeviceModalVisible(true);
   const closeDeleteDeviceModalHandler = () =>
     setDeleteDeviceModalVisible(false);
-  const showAddDeviceModalHandler = () => addDeviceModalVisible(true);
-  const closeAddDeviceModalHandler = () => addDeviceModalVisible(false);
+
+  const showAddDeviceModalHandler = () => setAddDeviceModalVisible(true);
+  const closeAddDeviceModalHandler = () => setAddDeviceModalVisible(false);
 
   const editRowHandler = (newRow) => {
     // e.preventDefault();
@@ -152,6 +168,12 @@ const ExpandedRow = (props) => {
     console.log("newHiddenrowsKeys: ", hiddenRowKeys);
     setHiddenRowKeys(newHiddenRowKeys);
   };
+  const addRowHandler = (row) => {
+    // e.preventDefault();
+    console.log("row:", row);
+    devices.unshift(row);
+    setDevices(cloneDeep(devices));
+  };
 
   const buttonsFormatter = (cell, row) => {
     return (
@@ -160,17 +182,52 @@ const ExpandedRow = (props) => {
           onClick={showEditDeviceModalHandler}
           aria-label={"edit-button-" + row._id}
         >
-          {/* <EditIcon onClick={showEditDeviceModalHandler}/> */}
-          <EditIcon />
+          <EditIcon
+            onClick={() => {
+              showEditDeviceModalHandler();
+              setSelectedDevice(row);
+            }}
+          />
         </IconButton>
         <IconButton
-          onClick={showDeleteDeviceModalHandler}
+          onClick={() => {
+            showDeleteDeviceModalHandler();
+            setSelectedDevice(row);
+          }}
           color="secondary"
           aria-label={"delete-button-" + row._id}
         >
           <DeleteIcon />
         </IconButton>
       </>
+    );
+  };
+
+  const buttonHeaderFormatter = (
+    column,
+    colIndex,
+    { sortElement, filterElement }
+  ) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyItems: "center",
+          color: "#140d0d",
+          fontWeight: "bold",
+        }}
+      >
+          <NewButtonStyle>
+            <NewButton
+              onClick={() => {
+                showAddDeviceModalHandler();
+              }}
+            >
+              New
+            </NewButton>
+          </NewButtonStyle>
+      </div>
     );
   };
 
@@ -257,10 +314,10 @@ const ExpandedRow = (props) => {
       dataField: "button-group",
       text: "",
       formatter: buttonsFormatter,
-      headerFormatter,
+      headerFormatter: buttonHeaderFormatter,
       headerStyle: {
         width: "120px",
-      },
+      },  
       events: {
         onClick: (e, column, columnIndex, row, rowIndex) => {},
       },
@@ -272,41 +329,59 @@ const ExpandedRow = (props) => {
     setHub(props.hub);
   }, []);
 
-  if (hub === null)
+  if (!hub || !devices)
     return (
       <LoadingPage message={loadingMessage} hasFailed={loadingHasFailed} />
     );
   else
     return (
-      <SectionStyle>
-        <BootstrapTable
-          keyField="_id"
-          data={devices}
-          columns={columns}
-          defaultSorted={defaultSorted}
-          defaultSortDirection="asc"
-          condensed
-          hover
-          hiddenRows={hiddenRowKeys}
-          bordered={false}
-          noDataIndication="No devices"
-          tableHeaderClass={"col-hidden"}
-          filter={filterFactory()}
-        />
-        <EditDeviceModal
-          device={selectedDevice}
-          isOpen={editDeviceModalVisible}
-          onClose={closeEditDeviceModalHandler}
-          onSubmitForm={editRowHandler}
-        />
-        <DeleteDeviceModal
-          device={selectedDevice}
-          isOpen={deleteDeviceModalVisible}
-          onClose={closeDeleteDeviceModalHandler}
-          onSubmitForm={deleteRowHandler}
-        />
-      </SectionStyle>
+      <ContainerStyle>
+        <PaperUpperStyle />
+        <PaperBottomStyle>
+          {/* <NewButtonStyle>
+            <NewButton
+              onClick={() => {
+                showAddDeviceModalHandler();
+              }}
+            >
+              New Hub
+            </NewButton>
+          </NewButtonStyle> */}
+          <BootstrapTable
+            keyField="_id"
+            data={devices}
+            columns={columns}
+            defaultSorted={defaultSorted}
+            defaultSortDirection="asc"
+            condensed
+            hover
+            hiddenRows={hiddenRowKeys}
+            bordered={false}
+            noDataIndication="No devices"
+            tableHeaderClass={"col-hidden"}
+            filter={filterFactory()}
+          />
+          <EditDeviceModal
+            device={selectedDevice}
+            isOpen={editDeviceModalVisible}
+            onClose={closeEditDeviceModalHandler}
+            onSubmitForm={editRowHandler}
+          />
+          <DeleteDeviceModal
+            device={selectedDevice}
+            isOpen={deleteDeviceModalVisible}
+            onClose={closeDeleteDeviceModalHandler}
+            onSubmitForm={deleteRowHandler}
+          />
+          <AddDeviceModal
+            hub={hub}
+            isOpen={addDeviceModalVisible}
+            onClose={closeAddDeviceModalHandler}
+            onSubmitForm={addRowHandler}
+          />
+        </PaperBottomStyle>
+      </ContainerStyle>
     );
 };
 
-export default ExpandedRow;
+export default DevicePage;
