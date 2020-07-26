@@ -13,9 +13,8 @@ const fetchAllDevices = async () => {
     const link = API_KEY + "/device/devices";
     const response = await fetch(link);
     const responseData = await response.json();
-    let newItemList = responseData.devices;
-    console.log("fetch data success!: ", newItemList);
-    return newItemList;
+    if(!response.ok) throw Error(response.message);
+    return responseData.devices;
   } catch (err) {
     console.log("fetch data failed!");
   }
@@ -25,16 +24,16 @@ const getDevice = async (deviceId) => {
   try {
     const link = API_KEY + "/device/get/"  + deviceId;
     const response = await fetch(link);
+    if(!response.ok) throw Error(response.message);
+    
     const responseData = await response.json();
-    console.log("Fetched new data");
-    console.log(responseData.device);
     return responseData.device;
   } catch (err) {
     console.log("Fail to fetch data from device " + deviceId);
   }
 }
 
-const updateDevice = async (device) => {
+const editDevice = async (device) => {
   const { id, name, ipAddress, port, description } = device;
 
   const link = API_KEY + "/device/update";
@@ -53,9 +52,13 @@ const updateDevice = async (device) => {
 
   try {
     const response = await fetch(link, requestOptions);
+    if(!response.ok) throw Error(response.message);
+    const responseData = await response.json();
+    return responseData.device;
   } catch (err) {
     console.log(err);
     console.log("Fail to send data");
+
   }
 }
 
@@ -72,12 +75,11 @@ const createDevice = async (device) => {
 
   try {
     const response = await fetch(link, requestOptions);
-    if(!response.ok) throw "Error " + response.status + "! " +response.statusText;
+    if(!response.ok) throw Error(response.message);
     console.log("Device created successfully!")
-    return response;
+    const responseData = await response.json();
+    return responseData.device;
   } catch (err) {
-    console.log(err);
-    console.log("Fail to create device");
     throw err;
   }
 }
@@ -91,18 +93,16 @@ const deleteDevice = async (deviceId) => {
 
   try {
     const response = await fetch(link, requestOptions);
-    if(!response.ok) throw "Error "+ response.status + "! " +  response.statusText;
+    if(!response.ok) throw Error(response.message);
+    const responseData = await response.json();
+    return responseData.device;
   } catch (err) {
-    console.log(err);
-    console.log("Fail to delete device");
     throw err;
   }
-  console.log("Successfully deleted device");
 }
 
 const getCurrentDataSet = (historical) => {
   let currentHistorical = historical.slice(Math.max(currentHistorical.length - TIME_UNITS, 0));
-
   let currentDataSet = [
     {
       data: currentHistorical.map((set, index) => {
@@ -123,7 +123,7 @@ export {
   fetchAllDevices,
   getCurrentDataSet,
   createDevice,
-  updateDevice,
+  editDevice,
   deleteDevice,
   getDevice,
 };

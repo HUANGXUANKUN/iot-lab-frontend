@@ -12,9 +12,9 @@ export const useAuth = () => {
     setToken(token);
     setUserId(uid);
     setUserName(userName);
-    // Set expiration date to 1hr
+    // Set expiration date to 3hr
     const tokenExpirationDate =
-      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+      expirationDate || new Date(new Date().getTime() + 3* 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpirationDate);
     
     // save user data to localStorage

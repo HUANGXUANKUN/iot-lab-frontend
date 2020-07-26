@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
 import styled from "styled-components";
 import { deleteDevice, getDevice } from "../../apis/device-api";

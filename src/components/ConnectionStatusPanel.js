@@ -1,25 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import { pingHub, pingDevice } from '../apis/command-api';
 import Loader from 'react-loader-spinner'
 
-const ContainerGrid = styled.div`
-  display: flex;
-  justify-content: center;
-`
+
 const ButtonTextStyle = styled.div`
-  font-size: 8px;
+  font-size: 14px;
   font-style: italic;
   color: grey;
 `
 const StatusStyle = styled.div`
-  font-size: 8px;
+  font-size: 14px;
   font-style: italic;
   color: grey;
   display: flex;
-  justify-content: center;
+  justify-self: center;
+  align-items:center;
 `
 
 const Dot = styled.div`
@@ -74,25 +71,6 @@ const ConnectionStatus = props => {
       setConnection(false);
     }
   }
-
-  // try {
-  //   if (props.type === 'hub') {
-  //     pingHub(props.id).then(isConnected => {
-  //       // if (!unmounted.current) setConnection(isConnected);
-  //       console.log("hub connection: ", isConnected);
-  //       setConnection(isConnected);
-  //     })
-  //   } else if (props.type === 'device') {
-  //     pingDevice(props.id).then(isConnected => {
-  //       // if (!unmounted.current) setConnection(isConnected)
-  //       console.log("device connection: ", isConnected);
-  //       setConnection(isConnected)
-  //     });
-  //   }
-  // } catch{
-  //   console.log("fail to ping " + props.type + " with id = " + props.id);
-  //   setConnectionStatus('Disconnected');
-  // }
 
   useEffect(() => {
     setConnectionStatus('Loading');

@@ -155,7 +155,7 @@ const DeleteModalContent = (props) => {
         props.onClose();
       });
     } catch{
-      window.alert("Fail deleting hub!");
+      alert("Fail deleting hub!");
     }
   }
 
@@ -269,6 +269,7 @@ export default function HubCard(props) {
       getHub(hub._id).then(res => {
         setHub(res);
       });
+      props.fetchHubHandler();
     } catch{
       window.alert("fail updating hub")
     }

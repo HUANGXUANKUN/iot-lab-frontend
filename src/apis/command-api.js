@@ -6,15 +6,13 @@ import queryString from "query-string";
 
 const API_KEY = process.env.REACT_APP_BACKEND_API_KEY;
 
-const fetchValueFromDevice = async (hub, device, query) => {
-  //http://10.110.108.229:5000/fetch/device?device_ip=128:0:0:0&device_port=3000&query=fetch
+const fetchValueFromDevice = async (hub, device) => {
   const baseLink = "http://" + hub.ipAddress + ":" + hub.port + "/fetch/device";
   const link = queryString.stringifyUrl({
     url: baseLink,
     query: {
       device_ip: device.ipAddress,
       device_port: device.port,
-      query: query,
     },
   });
   console.log("link: ", link);
@@ -23,11 +21,10 @@ const fetchValueFromDevice = async (hub, device, query) => {
       method: "get",
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       url: link,
-      timeout: 5000,
+      timeout: 1000,
     });
-    const responseData = await res.json();
-    if (!res.ok) throw new Error(responseData.message);
-    return responseData;
+    if (!res.status && res.status!==200) throw new Error(res.error);
+    return res.data;
   } catch (error) {
     console.log(error.message);
     throw error;

@@ -1,27 +1,26 @@
-import React, { Suspense } from 'react';
+import React, { Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
   Switch,
-} from 'react-router-dom';
-import Appbar from './components/Appbar';
-import BackgroundPage from './components/BackgroundPage';
-import LoadingPage from './components/LoadingPage';
-import { AuthContext } from './assets/contexts/auth-context';
-import { useAuth } from './assets/hooks/auth-hook';
+} from "react-router-dom";
+import Appbar from "./components/Appbar";
+import BackgroundPage from "./components/BackgroundPage";
+import LoadingPage from "./components/LoadingPage";
+import { AuthContext } from "./assets/contexts/auth-context";
+import { useAuth } from "./assets/hooks/auth-hook";
 
 /**
- * Lazy loading to allows code splitting in chunk. 
+ * Lazy loading to allows code splitting in chunk.
  */
-const Main = React.lazy(() => import('./views/Main'))
-const Manage = React.lazy(() => import('./views/Manage'))
-const Authentication = React.lazy(() => import('./views/Authentication'))
-const TableView = React.lazy(() => import('./views/TableView'))
-const Device = React.lazy(() => import('./views/Device'))
-const Hub = React.lazy(() => import('./views/Hub'))
-const Network = React.lazy(() => import('./views/Network'))
-const Error = React.lazy(() => import('./views/Error'))
+const Main = React.lazy(() => import("./views/Main"));
+const Authentication = React.lazy(() => import("./views/Authentication"));
+const TableView = React.lazy(() => import("./views/TableView"));
+const Device = React.lazy(() => import("./views/Device"));
+const Hub = React.lazy(() => import("./views/Hub"));
+const Network = React.lazy(() => import("./views/Network"));
+const Error = React.lazy(() => import("./views/Error"));
 
 const App = () => {
   const { token, login, logout, userId, userName } = useAuth();
@@ -29,11 +28,11 @@ const App = () => {
 
   // if user is login
   if (token) {
-    { console.log("Has token") }
-    routes =
+    console.log("Has token");
+    routes = (
       <Switch>
         <Route path="/manage" exact>
-          <Manage />
+          <TableView />
         </Route>
         <Route path="/" exact>
           <Main />
@@ -53,11 +52,12 @@ const App = () => {
         <Route path="/table" exact>
           <TableView />
         </Route>
-        <Redirect to="/network" />
+        <Redirect to="/hub/5f1077cf5dcee500171efd5b" />
       </Switch>
+    );
   } else {
     // Visitors are only allowed to access home page and login page
-    { console.log("No token") }
+    console.log("No token");
     routes = (
       <Switch>
         <Route path="/" exact>
@@ -79,7 +79,7 @@ const App = () => {
         userId: userId,
         userName: userName,
         login: login,
-        logout: logout
+        logout: logout,
       }}
     >
       <Router>
@@ -87,14 +87,12 @@ const App = () => {
           {/* <Navbar /> */}
           <Appbar />
           <main>
-            <Suspense fallback={<LoadingPage />}>
-              {routes}
-            </Suspense>
+            <Suspense fallback={<LoadingPage />}>{routes}</Suspense>
           </main>
         </BackgroundPage>
       </Router>
     </AuthContext.Provider>
   );
-}
+};
 
 export default App;

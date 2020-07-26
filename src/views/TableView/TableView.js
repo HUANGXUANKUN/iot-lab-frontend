@@ -18,7 +18,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import cloneDeep from "lodash/cloneDeep";
 import Modal from "react-modal";
 
-import NewButton from "./NewButton";
+import NewButton from "../../components/NewButton";
 import LoadingPage from "../../components/LoadingPage";
 import { createHub, fetchAllHubs } from "../../apis/hub-api";
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
