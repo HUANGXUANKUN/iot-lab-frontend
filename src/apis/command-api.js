@@ -89,7 +89,7 @@ const pingHub = async (hub) => {
 };
 
 const sendHubCommand = async (hub, query) => {
-  const baseLink = "http://" + hub.ipAddress + ":" + hub.port + "/ping/device";
+  const baseLink = "http://" + hub.ipAddress + ":" + hub.port + "/command/hub";
   const link = queryString.stringifyUrl({
     url: baseLink,
     query: {

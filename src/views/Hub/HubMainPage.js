@@ -19,7 +19,6 @@ import CommandBoard from "./CommandBoard";
 
 
 const ContainerStyle = styled.div`
-  border: 2px solid red;
   display: flex;
   height: ${(props) => window.innerHeight - 80}px;
   margin: 10px;
@@ -34,16 +33,11 @@ const PaperLeftStyle = styled.div`
 
 const PaperRightStyle = styled.div`
   display: flex;
-  border: 2px solid blue;
-  /* background-color: white; */
   width: ${(props) => window.innerWidth - 440}px;
-  /* flex-grow: 1; */
   margin: 5px;
-  /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19); */
 `;
 
 const Container = styled.div`
-  border: 2px solid yellow;
   width: 100%;
   padding: 10px;
 `;
@@ -139,10 +133,11 @@ export default function () {
               </IconButton>
               <IconButton
                 color="secondary"
+                
                 onClick={showDeleteModalHandler}
                 aria-label="delete"
               >
-                <DeleteIcon />
+                <DeleteIcon/>
               </IconButton>
             </ButtonGroup>
             <CommandBoard hub={hub} devices={devices}/>

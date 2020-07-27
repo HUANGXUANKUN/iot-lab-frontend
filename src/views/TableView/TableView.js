@@ -237,51 +237,6 @@ const TableView = (props) => {
     }
   }, []);
 
-  const getRow = (row) => {
-    return data.find((hub) => hub._id === row._id);
-  };
-
-  const updateTableRow = (array, target_index, form) => {
-    return array.map((item, index) => {
-      if (index == target_index) {
-        // This is the item we care about - lets replace it with updated data
-        return form;
-      }
-      // Otherwise, this is other rows we do not want - keep it as-is
-      return item;
-    });
-  };
-
-  // const deleteTableRow = (array, target_index) => {
-  //   return array.map((item, index) => {
-  //     if (index != target_index) {
-  //       // This is the item we care about - lets replace it with updated data
-  //       return item;
-  //     }
-  //   });
-  // };
-
-  // const editRowHandler = (row, rowIndex) => {
-  //   console.log("row index is: ", rowIndex);
-  //   let dataRow = getRow(row);
-  //   dataRow.description = "new updated description...";
-  //   const newData = updateTableRow(data, rowIndex, dataRow);
-  //   console.log("new data is ", data);
-  //   setData(newData);
-  // };
-
-  const deleteRowHandler = (row, rowIndex) => {
-    // e
-    console.log("row index is: ", rowIndex);
-    // let dataRow = getRow(row);
-    // dataRow.description = "new updated description...";
-    // const newData = deleteTableRow(data, rowIndex);
-    hiddenRowKeys.push(row._id);
-    // const newData = cloneDeep(data);
-    console.log("newHiddenrowsKeys: ", hiddenRowKeys);
-    setData(cloneDeep(hiddenRowKeys));
-  };
-
   function showNewHubModalHandler() {
     setNewHubModalVisible(true);
   }
@@ -295,30 +250,6 @@ const TableView = (props) => {
     const newData = cloneDeep(data);
     setData(newData);
   };
-
-  // const addButtonFormatter = (cell, row) => {
-  //   return (
-  //     <IconButton aria-label="add">
-  //       <AddIcon />
-  //     </IconButton>
-  //   );
-  // };
-
-  // const deleteButtonFormatter = (cell, row) => {
-  //   return (
-  //     <IconButton aria-label="add">
-  //       <DeleteIcon />
-  //     </IconButton>
-  //   );
-  // };
-
-  // const editButtonFormatter = (cell, row) => {
-  //   return (
-  //     <IconButton aria-label="edit">
-  //       <EditIcon />
-  //     </IconButton>
-  //   );
-  // };
 
   const columns = [
     {
@@ -347,7 +278,6 @@ const TableView = (props) => {
       headerFormatter,
       sortCaret,
       headerStyle: {
-        // backgroundColor: '#c8e6c9',
         width: "250px",
       },
     },
@@ -376,41 +306,7 @@ const TableView = (props) => {
       sortCaret: sortCaret,
       headerFormatter,
     },
-    // {
-    //   dataField: "add",
-    //   text: "add",
-    //   formatter: addButtonFormatter,
-    //   events: {
-    //     onClick: () => {
-    //       addRowHandler();
-    //     }
-    //   }
-    // },
-    // {
-    //   dataField: "edit",
-    //   text: "edit",
-    //   formatter:editButtonFormatter,
-    //   events: {
-    //     onClick: () => {
-    //       editRowHandler();
-    //     }
-    //   }
-    // },
-    // {
-    //   dataField: "add",
-    //   text: "add",
-    //   formatter:deleteButtonFormatter,
-    //   events: {
-    //     onClick: () => {
-    //       deleteRowHandler();
-    //     }
-    //   }
-    // },
   ];
-
-  const afterSearch = (newResult) => {
-    console.log(newResult);
-  };
 
   const defaultSorted = [
     {

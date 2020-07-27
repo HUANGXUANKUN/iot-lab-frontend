@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from "react";
+import {useHistory} from "react-router-dom";
 import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import Chip from "@material-ui/core/Chip";
+
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
 import LoadingSection from "../../components/LoadingSection";
+import ConnectionStatusPanel from "../../components/ConnectionStatusPanel";
+import truncate from "../../assets/util/truncate";
 
-const CurrentSelectedStyled = styled.div`
-  text-align: center;
-`;
 const Container = styled.h2`
   width: 350px;
   margin: 10px;
+`;
+
+const HubHeader = styled.div`
+  font-size: 16px;
+  text-align: left;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 40px;
+  margin: 20px 0px;
 `;
 
 const SectionStyle = styled.div`
@@ -16,59 +32,99 @@ const SectionStyle = styled.div`
   text-align: left;
   font-size: 12pt;
   justify-items: left;
+  align-items: center;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   grid-template-columns: 1fr 1fr;
 `;
-const DateStyle = styled.div`
-  text-align: left;
-  font-style: italic;
-  align-content: center;
-  font-size: 10pt;
-  justify-items: left;
-`;
-const TitleStyle = styled.div`
-  font-weight: bold;
-`;
+
+const HubLinkButton = (props) => {
+  let history = useHistory();
+
+  function handleClick() {
+    history.push(props.link);
+  }
+
+  return (
+    <Tooltip title={props.text} aria-label={"tooltip-name-" + props.text}>
+      <Button color="inherit" onClick={handleClick}>
+        <Typography color='primary' variant="h6"> {truncate(props.text, 20, true)}</Typography>
+      </Button>
+    </Tooltip>
+  );
+};
 
 const Information = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [node, setNode] = useState(null);
+  const [type, setType] = useState(null);
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [props]);
+    if (props.node !== null) setType(props.node.type);
+  }, [props.node]);
 
-  let deviceList;
-  if (isLoading) return <LoadingSection />;
-  else if (props.node === null) return <Container></Container>;
+  if (props.node === null) return <Container></Container>;
   else
     return (
       <Container>
-        <CurrentSelectedStyled> {props.node.id} </CurrentSelectedStyled>
         {props.node.type !== "center" && (
-          <SectionStyle>
-            <TitleStyle>Description:</TitleStyle>
-            <div>{props.node.description}</div>
-            <TitleStyle>Id:</TitleStyle>
-            <div>{props.node._id}</div>
-            <TitleStyle>IP Address:</TitleStyle>
-            <div>{props.node.ipAddress}</div>
-            <TitleStyle>Port: </TitleStyle>
-            <div>{props.node.port}</div>
-            <TitleStyle>Last-Modified:</TitleStyle>
-            <div>{getLocalDateTimeString(props.node.lastModified)}</div>
-            {props.node.type === "hub" && (
-              <>
-                <TitleStyle>Devices:</TitleStyle>
-                <div>
-                  {props.node.devices.map((device) => (
-                    <div key={"node-device-" + device._id}>{device.name}</div>
+          <>
+            <HubHeader>
+              {type==="hub" ? 
+              <Chip size="small" label={props.node.type} style={{width:"100px", backgroundColor:"green"}} color='primary'/>
+              : 
+              <Chip size="small" label={props.node.type} style={{width:"100px", backgroundColor:"#877CD6"}} color='primary'/>
+            }
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "250px",
+                }}
+              >
+                {
+                  props.node.type === "hub" ?
+                  <HubLinkButton link={"hub/" + props.node._id} text={props.node.id} />
+                  :
+                  <HubLinkButton link={"hub/" + props.node.hub} text={props.node.id} />
+                }
+              </div>
+            </HubHeader>
+            <SectionStyle>
+              <div>Description: </div>
+              <div>{truncate(props.node.description, 50, true)}</div>
+              <div>Id: </div>
+              <div>{props.node._id}</div>
+              <div>IP Address: </div>
+              <div>{props.node.ipAddress}</div>
+              <div>Port: </div>
+              <div>{props.node.port}</div>
+              <div>Last Modified: </div>
+              <div>{getLocalDateTimeString(props.node.lastModified)}</div>
+              {props.node.type === "hub" && (
+                <>
+                  <div>Devices:</div>
+                  {props.node.devices.map((device, index) => (
+                    <>
+                      {index !== 0 && <div/>}
+                      <div key={"node-device-" + device._id}>
+                        <Tooltip
+                          title={device.description}
+                          aria-label={"tooltip-device-name" + device._id}
+                          >
+                          <Typography
+                            color="primary"
+                            style={{ fontSize: "18px", textAlign: "left" }}
+                            >
+                            {truncate(device.name, 30, true)}
+                          </Typography>
+                        </Tooltip>
+                      </div>
+                    </>
                   ))}
-                </div>
-              </>
-            )}
-          </SectionStyle>
+                </>
+              )}
+              </SectionStyle>
+          </>
         )}
       </Container>
     );

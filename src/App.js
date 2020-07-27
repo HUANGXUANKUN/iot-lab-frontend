@@ -17,7 +17,6 @@ import { useAuth } from "./assets/hooks/auth-hook";
 const Main = React.lazy(() => import("./views/Main"));
 const Authentication = React.lazy(() => import("./views/Authentication"));
 const TableView = React.lazy(() => import("./views/TableView"));
-const Device = React.lazy(() => import("./views/Device"));
 const Hub = React.lazy(() => import("./views/Hub"));
 const Network = React.lazy(() => import("./views/Network"));
 const Error = React.lazy(() => import("./views/Error"));
@@ -37,9 +36,6 @@ const App = () => {
         <Route path="/" exact>
           <Main />
         </Route>
-        <Route path="/device/:deviceId" exact>
-          <Device />
-        </Route>
         <Route path="/hub/:hubId" exact>
           <Hub />
         </Route>
@@ -53,6 +49,7 @@ const App = () => {
           <TableView />
         </Route>
         <Redirect to="/hub/5f1077e65dcee500171efd5d" />
+        {/* <Redirect to="/network" /> */}
       </Switch>
     );
   } else {

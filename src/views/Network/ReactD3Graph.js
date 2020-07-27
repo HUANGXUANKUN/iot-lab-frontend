@@ -4,33 +4,38 @@ import { Graph } from "react-d3-graph";
 import InfoSection from "./InfoSection";
 import LoadingPage from "../../components/LoadingPage";
 import { fetchAllHubs } from "../../apis/hub-api";
-import { red } from "@material-ui/core/colors";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
 
-const CANVAS_WIDTH = window.innerWidth - 400;
-const CANVAS_HEIGHT = window.innerHeight - 80;
+const CANVAS_WIDTH = window.innerWidth - 450;
+const CANVAS_HEIGHT = window.innerHeight - 100;
 console.log(CANVAS_HEIGHT, CANVAS_WIDTH);
-const CENTER_X = CANVAS_WIDTH / 2;
+const CENTER_X = CANVAS_WIDTH / 2 -30;
 const CENTER_Y = CANVAS_HEIGHT / 2;
 const RADIUS_HUB = { horizontal: CANVAS_WIDTH/5, vertical: CANVAS_HEIGHT/5 };
 const RADIUS_DEVICE = { horizontal: CANVAS_WIDTH/2.3, vertical: CANVAS_HEIGHT/2.3 };
 const RANDOM_RANGE = 0.2;
 const CENTER_ID = "IoT-Cloud-Server";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    // padding: theme.spacing(2),
-    margin: "10px",
-    height: "90vh",
-    textAlign: "left",
-    color: theme.palette.text.secondary,
-  },
-}));
+const ContainerStyle = styled.div`
+display: flex;
+height: ${(props) => window.innerHeight - 80}px;
+margin: 10px;
+`;
+
+const PaperLeftStyle = styled.div`
+background-color: white;
+width: 400px;
+margin: 5px;
+box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const PaperRightStyle = styled.div`
+display: flex;
+background-color: white;
+width: ${(props) => window.innerWidth - 440}px;
+margin: 5px;
+box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+`;
+
 
 const GRAPG_CONFIG = {
   collapsible: false,
@@ -181,6 +186,7 @@ const nodesPositioning = (
         ipAddress: device.ipAddress,
         port: device.port,
         lastModified: device.lastModified,
+        hub: device.hub,
         x: device_x,
         y: device_y,
         size: 400,
@@ -212,25 +218,15 @@ const nodesPositioning = (
   return nodeDataGenerated;
 };
 
-const ContainerStyle = styled.div`
-  display: flex;
-  align-self: center;
-  justify-content: center;
-  min-height: 500px;
-  min-width: 500px;
-`;
-
 const findByNodeId = (device, id) => {
   return device.id === id;
 };
 
 export default function () {
   const [data, setData] = useState(null);
+  const [hubs, setHubs] = useState(null);
   const [currentNodeData, setCurrentNodeData] = useState(null);
-  const classes = useStyles();
 
-
-  
   const GRAPG_CONFIG = {
     collapsible: false,
     nodeHighlightBehavior: true,
@@ -274,6 +270,7 @@ export default function () {
     try {
       fetchAllHubs().then((res) => {
         // process data
+        setHubs(res);
         console.log("Hubs data: ", res);
         const dataGenerated = nodesPositioning(
           res,
@@ -285,9 +282,7 @@ export default function () {
         );
         // const dataGenerated = nodesPositioning(dummyHubData, CENTER_X, CENTER_Y, RADIUS_HUB, RADIUS_DEVICE, RANDOM_RANGE);
         setData(dataGenerated);
-        if (dataGenerated.nodes.length > 1)
           setCurrentNodeData(dataGenerated.nodes[1]);
-        else setCurrentNodeData(dataGenerated.nodes[0]);
       });
     } catch {
       console.log("fail fetching data");
@@ -342,14 +337,15 @@ export default function () {
     );
   };
 
+
   if (data === null) return <LoadingPage message="Loading network diagram..."/>;
   else
     return (
       <ContainerStyle>
-        <Paper className={classes.paper}>
+        <PaperLeftStyle>
           <InfoSection node={currentNodeData} />
-        </Paper>
-        <Paper className={classes.paper}>
+        </PaperLeftStyle>
+        <PaperRightStyle>
           <Graph
             id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
             data={data}
@@ -367,7 +363,7 @@ export default function () {
             onMouseOutLink={onMouseOutLink}
             onNodePositionChange={onNodePositionChange}
           />
-        </Paper>
+        </PaperRightStyle>
       </ContainerStyle>
     );
 }

@@ -53,16 +53,13 @@ const ChartWebSocket = (props) => {
       });
 
       socket.on("date", (response) => {
-        console.log(response);
         const date = new Date(Number(response.value));
         const localDateString = date.toLocaleDateString();
         const localTimeString = date.toLocaleTimeString();
         const formattedTime = localDateString + " " + localTimeString;
         const seconds = date.getSeconds();
 
-        console.log(formattedTime);
         setData((currentData) => {
-          console.log(currentData);
           let newDataSet = [...currentData];
           newDataSet.push({ value: seconds });
           newDataSet = newDataSet.slice(Math.max(newDataSet.length - 10, 0));
@@ -84,8 +81,8 @@ const ChartWebSocket = (props) => {
     <Container>
       <div style={{ margin: "10px" }}>
         <div style={{ display: "flex" }}>
-          <Chip size="small" label="WebSocket Polling" color="primary" />
-          <div style={{ fontWeight: "bold", margin: "0px 5px" }}>
+          <Chip style={{backgroundColor:"#1976D1"}} size="small" label="WebSocket Polling" color="primary" />
+          <div style={{ margin: "0px 10px" }}>
             {connectionLink}
           </div>
         </div>

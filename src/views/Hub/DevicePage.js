@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import { useHistory } from "react-router-dom";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Typography from "@material-ui/core/Typography";
@@ -9,7 +7,6 @@ import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -66,7 +63,7 @@ const PaperBottomStyle = styled.div`
 const descriptionFormatter = (cell, row) => {
   return (
     <Tooltip title={cell} aria-label={"tooltip-device-description" + row._id}>
-      <Typography>{truncate(cell, 30, true)}</Typography>
+      <Typography style={{ fontSize: "13px" }}>{truncate(cell, 30, true)}</Typography>
     </Tooltip>
   );
 };
@@ -152,7 +149,6 @@ const DevicePage = (props) => {
   };
   const deleteRowHandler = (row) => {
     // e.preventDefault();
-    // const rowId = row._id;
     hiddenRowKeys.push(row._id);
     const newHiddenRowKeys = cloneDeep(hiddenRowKeys);
     console.log("newHiddenrowsKeys: ", hiddenRowKeys);
@@ -339,10 +335,10 @@ const DevicePage = (props) => {
       <ContainerStyle>
         <PaperUpperStyle>
           <div style={{ display: "flex", marginLeft:"5px" }}>
-            <Typography variant="h4">Device:</Typography>
+            <Typography variant="h6">Device:</Typography>
             {deviceForGraph && (
               <Badge color="secondary" variant="dot">
-                <Typography style={{ fontWeight: "bold",margin: "0px 5px"  }} variant="h4">{deviceForGraph.name}</Typography>
+                <Typography variant="h6" style={{ fontWeight: "bold",margin: "0px 5px"  }}>{deviceForGraph.name}</Typography>
               </Badge>
             )}
           </div>

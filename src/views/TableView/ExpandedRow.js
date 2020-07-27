@@ -1,49 +1,24 @@
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
-import SvgIcon from "@material-ui/core/SvgIcon";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import LoadingPage from "../../components/LoadingPage";
-import { fetchAllHubs } from "../../apis/hub-api";
 import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
-import Section from "../../components/Section";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import overlayFactory from "react-bootstrap-table2-overlay";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ExpandedRow.css";
 import truncate from "../../assets/util/truncate";
 import Tooltip from "@material-ui/core/Tooltip";
-import cloneDeep from "lodash/cloneDeep";
 
 const SectionStyle = styled.div`
   padding: 20px;
 `;
-
-function DeviceLinkButton(props) {
-  let history = useHistory();
-
-  function handleClick() {
-    history.push(props.link);
-  }
-  return (
-    <Tooltip title={props.text} aria-label={"tooltip-name-" + props.text}>
-      <Button color="inherit" onClick={handleClick}>
-        <Typography style={{ fontSize: "12px" }}> {truncate(props.text, 10, true)}</Typography>
-      </Button>
-    </Tooltip>
-  );
-}
 
 const descriptionFormatter = (cell, row) => {
   return (
@@ -54,7 +29,11 @@ const descriptionFormatter = (cell, row) => {
 };
 
 const nameFormatter = (cell, row) => {
-  return <DeviceLinkButton link={"hub/" + row._id} text={cell} />;
+  return (
+    <Tooltip title={cell} aria-label={"tooltip-device-name" + row._id}>
+      <div style={{ fontSize: "12px" }}> {truncate(cell, 15, true)}</div>
+    </Tooltip>
+  );
 };
 
 function columnFormatter(cell, row) {

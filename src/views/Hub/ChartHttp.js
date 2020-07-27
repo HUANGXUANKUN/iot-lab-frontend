@@ -87,8 +87,8 @@ const ChartHttp = (props) => {
     <Container>
       <div style={{ margin: "10px" }}>
         <div style={{ display: "flex" }}>
-          <Chip size="small" label="HTTP Flask" color="primary" />
-          <div style={{ fontWeight: "bold", margin: "0px 5px" }}>
+          <Chip style= {{backgroundColor:"#1976D1"}} size="small" label="HTTP Flask" color="primary" />
+          <div style={{ margin: "0px 10px" }}>
             {connectionLink}
           </div>
         </div>

@@ -66,8 +66,6 @@ const ConnectionStatus = props => {
         });
       }
     } catch (err) {
-      console.log("err!");
-      console.log("Error! fail to ping " + props.type + " with id = " + props.id);
       setConnection(false);
     }
   }
