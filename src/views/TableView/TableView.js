@@ -126,7 +126,7 @@ const HubLinkButton = (props) => {
   return (
     <Tooltip title={props.text} aria-label={"tooltip-name-" + props.text}>
       <Button color="inherit" onClick={handleClick}>
-        <Typography> {truncate(props.text, 10, true)}</Typography>
+        <Typography color='primary'> {truncate(props.text, 10, true)}</Typography>
       </Button>
     </Tooltip>
   );

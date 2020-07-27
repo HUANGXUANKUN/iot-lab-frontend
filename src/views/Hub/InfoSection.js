@@ -42,7 +42,7 @@ export default function (props) {
         >
           <h3>{hub.name}</h3>
         </div>
-        <ConnectionStatusPanel type="hub" hub={hub} />
+        <ConnectionStatusPanel style={{width:"150px"}}type="hub" hub={hub} />
       </HubHeader>
       <SectionStyle>
         <div>Description: </div>

@@ -76,7 +76,7 @@ const ConnectionStatus = props => {
     setConnectionStatus('Loading');
     ping();
     return () => { unmounted.current = true }
-  }, [])
+  }, [props.hub])
 
   let StatusIcon = <SpinnerStyle>
     <Loader

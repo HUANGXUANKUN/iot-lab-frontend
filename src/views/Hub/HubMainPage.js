@@ -15,6 +15,8 @@ import EditHubModal from "../../components/Modals/EditHubModal";
 import DeleteHubModal from "../../components/Modals/DeleteHubModal";
 import DevicePage from "./DevicePage";
 import InfoSection from "./InfoSection";
+import CommandBoard from "./CommandBoard";
+
 
 const ContainerStyle = styled.div`
   border: 2px solid red;
@@ -31,10 +33,11 @@ const PaperLeftStyle = styled.div`
 `;
 
 const PaperRightStyle = styled.div`
-display:flex;
-  /* border: 2px solid blue; */
+  display: flex;
+  border: 2px solid blue;
   /* background-color: white; */
-  flex-grow: 1;
+  width: ${(props) => window.innerWidth - 440}px;
+  /* flex-grow: 1; */
   margin: 5px;
   /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19); */
 `;
@@ -75,6 +78,7 @@ const ButtonGroup = styled.div`
 
 export default function () {
   const [hub, setHub] = useState(null);
+  const [devices, setDevices] = useState([]);
   const hubId = useParams().hubId;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -114,6 +118,7 @@ export default function () {
       getHub(hubId).then((res) => {
         console.log(res);
         setHub(res);
+        setDevices(res.devices)
       });
     } catch {
       console.log("Fail fetching hub with id: ", hubId);
@@ -140,10 +145,11 @@ export default function () {
                 <DeleteIcon />
               </IconButton>
             </ButtonGroup>
+            <CommandBoard hub={hub} devices={devices}/>
           </Container>
         </PaperLeftStyle>
         <PaperRightStyle>
-          <DevicePage hub={hub}/>
+          <DevicePage hub={hub} />
         </PaperRightStyle>
         <EditHubModal
           hub={hub}

@@ -5,6 +5,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Typography from "@material-ui/core/Typography";
+import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -14,8 +15,6 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import SortIcon from "@material-ui/icons/Sort";
 import Tooltip from "@material-ui/core/Tooltip";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -29,7 +28,8 @@ import truncate from "../../assets/util/truncate";
 import EditDeviceModal from "../../components/Modals/EditDeviceModal";
 import DeleteDeviceModal from "../../components/Modals/DeleteDeviceModal";
 import AddDeviceModal from "../../components/Modals/AddDeviceModal";
-
+import ChartWebSocket from "./ChartWebSocket";
+import ChartHttp from "./ChartHttp";
 
 const NewButtonStyle = styled.div`
   margin: 10px 10px;
@@ -40,13 +40,15 @@ const ContainerStyle = styled.div`
   /* border: 2px solid yellow; */
   display: flex;
   flex-direction: column;
+  width:100%;
   /* height: ${(props) => window.innerHeight - 100}px; */
 `;
 
 const PaperUpperStyle = styled.div`
   /* border: 2px solid purple; */
+  padding: 10px;
   background-color: white;
-  height: 00px;
+  height: ${(props) => Math.floor(window.innerHeight - 100) / 2}px;
   margin-bottom: 5px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -57,23 +59,14 @@ const PaperBottomStyle = styled.div`
   flex-grow: 1;
   margin-top: 5px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
-  overflow: auto;
+  overflow: scroll;
+  padding: 10px;
 `;
 
 const descriptionFormatter = (cell, row) => {
   return (
     <Tooltip title={cell} aria-label={"tooltip-device-description" + row._id}>
       <Typography>{truncate(cell, 30, true)}</Typography>
-    </Tooltip>
-  );
-};
-
-const nameFormatter = (cell, row) => {
-  return (
-    <Tooltip title={cell} aria-label={"tooltip-device-name" + row._id}>
-      <Typography style={{ fontSize: "13px" }}>
-        {truncate(cell, 30, true)}
-      </Typography>
     </Tooltip>
   );
 };
@@ -88,10 +81,6 @@ const dateTimeFormatter = (cell, row) => {
       {getLocalDateTimeString(cell)}
     </Typography>
   );
-};
-
-const rowStyleFormat = (row, rowIdx) => {
-  return { backgroundColor: "red" };
 };
 
 const headerFormatter = (column, colIndex, { sortElement, filterElement }) => {
@@ -130,6 +119,7 @@ const defaultSorted = [
 const DevicePage = (props) => {
   const [hub, setHub] = useState(null);
   const [devices, setDevices] = useState(null);
+  const [deviceForGraph, setDeviceForGraph] = useState(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [hiddenRowKeys, setHiddenRowKeys] = useState([]);
   const [loadingMessage, setLoadingMessage] = useState(null);
@@ -175,6 +165,18 @@ const DevicePage = (props) => {
     setDevices(cloneDeep(devices));
   };
 
+  const nameFormatter = (cell, row) => {
+    return (
+      <Tooltip title={cell} aria-label={"tooltip-device-name" + row._id}>
+        <Button onClick={() => setDeviceForGraph(row)}>
+          <Typography color='primary' style={{ fontSize: "13px" }}>
+            {truncate(cell, 30, true)}
+          </Typography>
+        </Button>
+      </Tooltip>
+    );
+  };
+
   const buttonsFormatter = (cell, row) => {
     return (
       <>
@@ -218,15 +220,15 @@ const DevicePage = (props) => {
           fontWeight: "bold",
         }}
       >
-          <NewButtonStyle>
-            <NewButton
-              onClick={() => {
-                showAddDeviceModalHandler();
-              }}
-            >
-              New
-            </NewButton>
-          </NewButtonStyle>
+        <NewButtonStyle>
+          <NewButton
+            onClick={() => {
+              showAddDeviceModalHandler();
+            }}
+          >
+            New
+          </NewButton>
+        </NewButtonStyle>
       </div>
     );
   };
@@ -317,7 +319,7 @@ const DevicePage = (props) => {
       headerFormatter: buttonHeaderFormatter,
       headerStyle: {
         width: "120px",
-      },  
+      },
       events: {
         onClick: (e, column, columnIndex, row, rowIndex) => {},
       },
@@ -326,27 +328,30 @@ const DevicePage = (props) => {
 
   useEffect(() => {
     setDevices(props.hub.devices);
-    setHub(props.hub);
   }, []);
 
-  if (!hub || !devices)
+  if (!props.hub || !devices)
     return (
       <LoadingPage message={loadingMessage} hasFailed={loadingHasFailed} />
     );
   else
     return (
       <ContainerStyle>
-        <PaperUpperStyle />
+        <PaperUpperStyle>
+          <div style={{ display: "flex", marginLeft:"5px" }}>
+            <Typography variant="h4">Device:</Typography>
+            {deviceForGraph && (
+              <Badge color="secondary" variant="dot">
+                <Typography style={{ fontWeight: "bold",margin: "0px 5px"  }} variant="h4">{deviceForGraph.name}</Typography>
+              </Badge>
+            )}
+          </div>
+          <div style={{ display: "flex" }}>
+            <ChartHttp hub={props.hub} device={deviceForGraph} />
+            <ChartWebSocket hub={props.hub} device={deviceForGraph} />
+          </div>
+        </PaperUpperStyle>
         <PaperBottomStyle>
-          {/* <NewButtonStyle>
-            <NewButton
-              onClick={() => {
-                showAddDeviceModalHandler();
-              }}
-            >
-              New Hub
-            </NewButton>
-          </NewButtonStyle> */}
           <BootstrapTable
             keyField="_id"
             data={devices}
@@ -374,7 +379,7 @@ const DevicePage = (props) => {
             onSubmitForm={deleteRowHandler}
           />
           <AddDeviceModal
-            hub={hub}
+            hub={props.hub}
             isOpen={addDeviceModalVisible}
             onClose={closeAddDeviceModalHandler}
             onSubmitForm={addRowHandler}
