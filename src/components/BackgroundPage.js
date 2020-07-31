@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { greyBackgroundColor } from './../assets/styles/theme-styles';
 
 const BackgroundPage = styled.div`
-  ${greyBackgroundColor};
+  background-color: #F5F8FA;
   position: fixed;
   width: 100vw;
   height: 100vh;

@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import LoadingPage from "../../components/LoadingPage";
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -13,7 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ExpandedRow.css";
-import truncate from "../../assets/util/truncate";
+import truncate from "../../util/truncate";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const SectionStyle = styled.div`

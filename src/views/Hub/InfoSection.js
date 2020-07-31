@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
-import Section from "../../components/Section";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
 import ConnectionStatusPanel from "../../components/ConnectionStatusPanel";
 import Typography from "@material-ui/core/Typography";
 
@@ -24,6 +23,7 @@ const SectionStyle = styled.div`
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   grid-template-columns: 1fr 1fr;
+  margin: 0px 10px;
 `;
 
 export default function (props) {

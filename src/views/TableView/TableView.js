@@ -21,15 +21,16 @@ import Modal from "react-modal";
 import NewButton from "../../components/NewButton";
 import LoadingPage from "../../components/LoadingPage";
 import { createHub, fetchAllHubs } from "../../apis/hub-api";
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
 import Section from "./../../components/Section";
-import truncate from "../../assets/util/truncate";
+import truncate from "../../util/truncate";
 import { useForm } from "react-hook-form";
 
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ExpandedRow from "./ExpandedRow";
 import "./TableView.css";
+import ErrorFormMessage from "../../components/Modals/ErrorFormMessage";
 
 const ButtonStyle = styled.div`
   margin: 10px 10px;
@@ -38,9 +39,11 @@ const ButtonStyle = styled.div`
 `;
 
 const FormGridStyle = styled.div`
+  display: flex;
+  flex-direction: column;
   align-content: center;
   align-items: center;
-  display: grid;
+  width: 300px;
   text-align: center;
   padding: 10px;
   font-size: 16pt;
@@ -48,10 +51,6 @@ const FormGridStyle = styled.div`
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   grid-template-columns: 1fr;
-`;
-
-const FormContainerStyle = styled.div`
-  margin: 15px;
 `;
 
 const modalCustomStyles = {
@@ -69,8 +68,6 @@ const modalCustomStyles = {
 const NewHubForm = (props) => {
   const { register, handleSubmit, watch, errors, reset } = useForm();
   const onSubmit = (data, e) => {
-    console.log(data);
-    console.log("Creating Hub...");
     createHub(data)
       .then((res) => {
         e.target.reset();
@@ -83,36 +80,41 @@ const NewHubForm = (props) => {
   }; //form submit function which will invoke after successful validation
 
   return (
-    <FormContainerStyle>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormGridStyle>
-          <label>Name</label>
-          <input name="name" defaultValue="" ref={register} />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormGridStyle>
+        <h3> Create Hub </h3>
 
-          <label>Description</label>
-          <input
-            name="description"
-            defaultValue=""
-            ref={register({ required: true, maxLength: 200 })}
-          />
+        <label>Name</label>
+        <input
+          name="name"
+          defaultValue=""
+          ref={register({ required: true})}
+        />
 
-          <label>IP address</label>
-          <input
-            name="ipAddress"
-            defaultValue="192.27.221.30"
-            ref={register({ required: true, maxLength: 20 })}
-          />
+        <label>Description</label>
+        <input
+          name="description"
+          defaultValue=""
+          ref={register({ required: true})}
+        />
 
-          <label>Port</label>
-          <input
-            name="port"
-            defaultValue="3000"
-            ref={register({ required: true, maxLength: 4 })}
-          />
-          <input type="submit" />
-        </FormGridStyle>
-      </form>
-    </FormContainerStyle>
+        <label>IP address</label>
+        <input
+          name="ipAddress"
+          defaultValue="192.27.221.30"
+          ref={register({ required: true})}
+        />
+
+        <label>Port</label>
+        <input
+          name="port"
+          defaultValue="3000"
+          ref={register({ required: true})}
+        />
+        <input type="submit" />
+        <ErrorFormMessage errors={errors} />
+      </FormGridStyle>
+    </form>
   );
 };
 
@@ -126,7 +128,10 @@ const HubLinkButton = (props) => {
   return (
     <Tooltip title={props.text} aria-label={"tooltip-name-" + props.text}>
       <Button color="inherit" onClick={handleClick}>
-        <Typography color='primary'> {truncate(props.text, 10, true)}</Typography>
+        <Typography color="primary">
+          {" "}
+          {truncate(props.text, 10, true)}
+        </Typography>
       </Button>
     </Tooltip>
   );

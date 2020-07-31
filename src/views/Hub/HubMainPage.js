@@ -9,7 +9,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 import { getHub } from "../../apis/hub-api";
 import LoadingPage from "../../components/LoadingPage";
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
 import ConnectionStatusPanel from "../../components/ConnectionStatusPanel";
 import EditHubModal from "../../components/Modals/EditHubModal";
 import DeleteHubModal from "../../components/Modals/DeleteHubModal";

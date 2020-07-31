@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import SendIcon from "@material-ui/icons/Send";
 import Typography from "@material-ui/core/Typography";
-import truncate from "../../assets/util/truncate";
+import truncate from "../../util/truncate";
 
 const ContainerStyle = styled.div`
   display: flex;

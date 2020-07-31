@@ -58,19 +58,22 @@ const ChartHttp = (props) => {
             const localTimeString = date.toLocaleTimeString();
             const formattedTime = localDateString + " " + localTimeString;
             const seconds = date.getSeconds();
+            let randomSeconds;
+            if (Math.round(Math.random()) >= 0.5) {
+              randomSeconds = -1 * seconds;
+            } else randomSeconds = seconds;
 
             console.log(formattedTime);
             setData((currentData) => {
-              console.log(currentData);
               let newDataSet = [...currentData];
-              newDataSet.push({ value: seconds });
+              newDataSet.push({ value: randomSeconds });
               newDataSet = newDataSet.slice(
                 Math.max(newDataSet.length - 10, 0)
               );
               return newDataSet;
             });
             setDateMessage(formattedTime);
-            setCurrentValue(seconds);
+            setCurrentValue(randomSeconds);
           })
           .catch((err) => {
             console.log(err.message);
@@ -87,10 +90,13 @@ const ChartHttp = (props) => {
     <Container>
       <div style={{ margin: "10px" }}>
         <div style={{ display: "flex" }}>
-          <Chip style= {{backgroundColor:"#1976D1"}} size="small" label="HTTP Flask" color="primary" />
-          <div style={{ margin: "0px 10px" }}>
-            {connectionLink}
-          </div>
+          <Chip
+            style={{ backgroundColor: "#1976D1" }}
+            size="small"
+            label="HTTP Flask"
+            color="primary"
+          />
+          <div style={{ margin: "0px 10px" }}>{connectionLink}</div>
         </div>
         <div style={{ display: "flex" }}>
           <div style={{ width: "100px", display: "flex" }}>

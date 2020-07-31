@@ -1,4 +1,10 @@
-import React, { Suspense } from "react";
+import React, {
+  Suspense,
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+} from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -8,13 +14,13 @@ import {
 import Appbar from "./components/Appbar";
 import BackgroundPage from "./components/BackgroundPage";
 import LoadingPage from "./components/LoadingPage";
-import { AuthContext } from "./assets/contexts/auth-context";
-import { useAuth } from "./assets/hooks/auth-hook";
+import { AuthContext } from "./contexts/auth-context";
+import { useAuth } from "./hooks/auth-hook";
 
 /**
  * Lazy loading to allows code splitting in chunk.
  */
-const Main = React.lazy(() => import("./views/Main"));
+const Home = React.lazy(() => import("./views/Home"));
 const Authentication = React.lazy(() => import("./views/Authentication"));
 const TableView = React.lazy(() => import("./views/TableView"));
 const Hub = React.lazy(() => import("./views/Hub"));
@@ -25,16 +31,14 @@ const App = () => {
   const { token, login, logout, userId, userName } = useAuth();
   let routes;
 
-  // if user is login
-  if (token) {
-    console.log("Has token");
+  if (token || localStorage.getItem('userData')) {
     routes = (
       <Switch>
         <Route path="/manage" exact>
           <TableView />
         </Route>
         <Route path="/" exact>
-          <Main />
+          <Home />
         </Route>
         <Route path="/hub/:hubId" exact>
           <Hub />
@@ -48,18 +52,13 @@ const App = () => {
         <Route path="/table" exact>
           <TableView />
         </Route>
-        <Redirect to="/hub/5f1077e65dcee500171efd5d" />
-        {/* <Redirect to="/network" /> */}
+        <Redirect to={window.location.pathname} />
       </Switch>
     );
   } else {
     // Visitors are only allowed to access home page and login page
-    console.log("No token");
     routes = (
       <Switch>
-        <Route path="/" exact>
-          <Main />
-        </Route>
         <Route path="/login">
           <Authentication />
         </Route>

@@ -6,10 +6,8 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
-import LoadingSection from "../../components/LoadingSection";
-import ConnectionStatusPanel from "../../components/ConnectionStatusPanel";
-import truncate from "../../assets/util/truncate";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
+import truncate from "../../util/truncate";
 
 const Container = styled.h2`
   width: 350px;
@@ -30,12 +28,13 @@ const HubHeader = styled.div`
 const SectionStyle = styled.div`
   display: grid;
   text-align: left;
-  font-size: 12pt;
+  font-size: 11pt;
   justify-items: left;
   align-items: center;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   grid-template-columns: 1fr 1fr;
+  margin: 0px 10px;
 `;
 
 const HubLinkButton = (props) => {
@@ -65,7 +64,7 @@ const Information = (props) => {
   else
     return (
       <Container>
-        {props.node.type !== "center" && (
+        {props.node && props.node.type !== "center" && (
           <>
             <HubHeader>
               {type==="hub" ? 
@@ -110,6 +109,7 @@ const Information = (props) => {
                         <Tooltip
                           title={device.description}
                           aria-label={"tooltip-device-name" + device._id}
+                          placement="right"
                           >
                           <Typography
                             color="primary"

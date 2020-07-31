@@ -1,10 +1,8 @@
 import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
-import Card from "../../components/UIElements/Card";
-import ErrorModal from "../../components/UIElements/ErrorModal";
-import LoadingSpinner from "../../components/UIElements/LoadingSpinner";
-import { AuthContext } from "../../assets/contexts/auth-context";
+import { AuthContext } from "../../contexts/auth-context";
 import { Form, Button } from "react-bootstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,8 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import clsx from "clsx";
-import { useHttpClient } from '../../assets/hooks/http-hook';
+import { useHttpClient } from '../../hooks/http-hook';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +48,7 @@ const Auth = (props) => {
   const auth = useContext(AuthContext);
   const { control, register, handleSubmit, watch, errors, reset } = useForm();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
+  let history = useHistory();
   const [values, setValues] = React.useState({
     showPassword: false,
   });
@@ -84,6 +81,7 @@ const Auth = (props) => {
         }
       );
       auth.login(responseData.userId, responseData.userName, responseData.token);
+      history.push("/");
     } catch (err) {
       console.log(err);
       alert(err.message);

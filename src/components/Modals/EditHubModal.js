@@ -5,6 +5,7 @@ import LoadingSection from "../../components/LoadingSection";
 import Modal from "react-modal";
 import { Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import ErrorFormMessage from "./ErrorFormMessage";
 
 const modalCustomStyles = {
   content: {
@@ -13,17 +14,16 @@ const modalCustomStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    padding: "40px",
     transform: "translate(-50%, -50%)",
   },
 };
 
 const GridStyle = styled.div`
+  display: flex;
+  flex-direction: column;
   align-content: center;
   align-items: center;
-  display: grid;
-  /* width: 100;
-    margin: 0; */
+  width: 300px;
   text-align: center;
   padding: 10px;
   font-size: 16pt;
@@ -33,10 +33,6 @@ const GridStyle = styled.div`
   grid-template-columns: 1fr;
 `;
 
-const FormStyle = styled.div`
-  margin: 15px;
-`;
-
 const EditModalContent = (props) => {
   const { _id, name, ipAddress, port, description } = props.hub;
   const { register, handleSubmit, watch, errors, reset } = useForm();
@@ -44,7 +40,7 @@ const EditModalContent = (props) => {
     data.id = _id;
     updateHub(data)
       .then((res) => {
-        console.log("updating hub: ",res);
+        console.log("updating hub: ", res);
         props.onClose();
         props.onSubmitForm(res);
       })
@@ -54,36 +50,36 @@ const EditModalContent = (props) => {
   };
 
   return (
-    <FormStyle>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <GridStyle>
-          <label>Name</label>
-          <input name="name" defaultValue={name} ref={register} />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <GridStyle>
+        <h3> Edit Hub </h3>
+        <label>Name</label>
+        <input name="name" defaultValue={name} ref={register} />
 
-          <label>Description</label>
-          <input
-            name="description"
-            defaultValue={description}
-            ref={register({ required: true, maxLength: 50 })}
-          />
+        <label>Description</label>
+        <input
+          name="description"
+          defaultValue={description}
+          ref={register({ required: true })}
+        />
 
-          <label>IP address</label>
-          <input
-            name="ipAddress"
-            defaultValue={ipAddress}
-            ref={register({ required: true, maxLength: 20 })}
-          />
+        <label>IP address</label>
+        <input
+          name="ipAddress"
+          defaultValue={ipAddress}
+          ref={register({ required: true })}
+        />
 
-          <label>Port</label>
-          <input
-            name="port"
-            defaultValue={port}
-            ref={register({ required: true, maxLength: 4 })}
-          />
-          <input type="submit" />
-        </GridStyle>
-      </form>
-    </FormStyle>
+        <label>Port</label>
+        <input
+          name="port"
+          defaultValue={port}
+          ref={register({ required: true, maxLength: 4 })}
+        />
+        <input type="submit" />
+        <ErrorFormMessage errors={errors} />
+      </GridStyle>
+    </form>
   );
 };
 

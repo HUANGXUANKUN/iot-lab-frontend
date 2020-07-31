@@ -8,65 +8,38 @@ import { fetchAllHubs } from "../../apis/hub-api";
 const CANVAS_WIDTH = window.innerWidth - 450;
 const CANVAS_HEIGHT = window.innerHeight - 100;
 console.log(CANVAS_HEIGHT, CANVAS_WIDTH);
-const CENTER_X = CANVAS_WIDTH / 2 -30;
+const CENTER_X = CANVAS_WIDTH / 2 - 30;
 const CENTER_Y = CANVAS_HEIGHT / 2;
-const RADIUS_HUB = { horizontal: CANVAS_WIDTH/5, vertical: CANVAS_HEIGHT/5 };
-const RADIUS_DEVICE = { horizontal: CANVAS_WIDTH/2.3, vertical: CANVAS_HEIGHT/2.3 };
-const RANDOM_RANGE = 0.2;
-const CENTER_ID = "IoT-Cloud-Server";
+const RADIUS_HUB = {
+  horizontal: CANVAS_WIDTH / 5,
+  vertical: CANVAS_HEIGHT / 5,
+};
+const RADIUS_DEVICE = {
+  horizontal: CANVAS_WIDTH / 2.3,
+  vertical: CANVAS_HEIGHT / 2.3,
+};
+const RANDOM_RANGE = 0.25;
 
 const ContainerStyle = styled.div`
-display: flex;
-height: ${(props) => window.innerHeight - 80}px;
-margin: 10px;
+  display: flex;
+  height: ${(props) => window.innerHeight - 80}px;
+  margin: 10px;
 `;
 
 const PaperLeftStyle = styled.div`
-background-color: white;
-width: 400px;
-margin: 5px;
-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+  background-color: white;
+  width: 400px;
+  margin: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const PaperRightStyle = styled.div`
-display: flex;
-background-color: white;
-width: ${(props) => window.innerWidth - 440}px;
-margin: 5px;
-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  background-color: white;
+  width: ${(props) => window.innerWidth - 440}px;
+  margin: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
 `;
-
-
-const GRAPG_CONFIG = {
-  collapsible: false,
-  nodeHighlightBehavior: true,
-  linkHighlightBehavior: true,
-  disableLinkForceConfig: false,
-  height: CANVAS_HEIGHT,
-  width: CANVAS_WIDTH,
-  directed: true,
-  node: {
-    color: "lightgreen",
-    size: 300,
-    fontSize: 18,
-    highlightStrokeColor: "blue",
-    highlightFontSize: 24,
-    highlightFontWeight: "bold",
-  },
-  link: {
-    highlightColor: "red",
-    fontWeight: "bold",
-    strokeWidth: 5,
-    highlightFontSize: 24,
-    highlightFontWeight: "bold",
-    markerHeight: 4,
-    markerWidth: 5,
-  },
-  d3: {
-    gravity: 0,
-    disableLinkForce: true,
-  },
-};
 
 const nodesPositioning = (
   hubData,
@@ -76,12 +49,13 @@ const nodesPositioning = (
   radius_device,
   randomRange
 ) => {
-
-  const generateRandomIndex = () => (1-randomRange*Math.random());
+  const generateRandomIndex = () => 1 - randomRange * Math.random();
   const generateX = (center_x, center_y, radius, radian) =>
-    parseInt(radius.horizontal * Math.cos(radian)*generateRandomIndex()) + center_x;
+    parseInt(radius.horizontal * Math.cos(radian) * generateRandomIndex()) +
+    center_x;
   const generateY = (center_x, center_y, radius, radian) =>
-    parseInt(radius.vertical * Math.sin(radian)*generateRandomIndex()) + center_y;
+    parseInt(radius.vertical * Math.sin(radian) * generateRandomIndex()) +
+    center_y;
 
   let totalHubCount = 0;
   let totalDeviceCount = 0;
@@ -165,7 +139,7 @@ const nodesPositioning = (
     });
 
     hub.devices.forEach((device) => {
-      let device_x = generateX(
+       let device_x = generateX(
         center_x,
         center_y,
         radius_device,
@@ -200,17 +174,12 @@ const nodesPositioning = (
         target: device.name,
       });
 
-
       radian_device_start += radian_device_gap;
-      // console.log("Current node: " + device.name + " Current radian" + radian_device_start);
     });
 
     if (hub.devices.length === 0) {
-      // console.log("Add a gap for ", hub.name);
       radian_device_start += radian_device_gap;
     }
-
-    // console.log("Current node: " + hub.name + " Current radian" + radian_device_start);
   }
 
   // outer most deviceNode gap for hub with no devices
@@ -280,9 +249,10 @@ export default function () {
           RADIUS_DEVICE,
           RANDOM_RANGE
         );
-        // const dataGenerated = nodesPositioning(dummyHubData, CENTER_X, CENTER_Y, RADIUS_HUB, RADIUS_DEVICE, RANDOM_RANGE);
         setData(dataGenerated);
+        if(dataGenerated["nodes"].length >= 1){
           setCurrentNodeData(dataGenerated.nodes[1]);
+        }
       });
     } catch {
       console.log("fail fetching data");
@@ -337,8 +307,8 @@ export default function () {
     );
   };
 
-
-  if (data === null) return <LoadingPage message="Loading network diagram..."/>;
+  if (data === null)
+    return <LoadingPage message="Loading network diagram..." />;
   else
     return (
       <ContainerStyle>

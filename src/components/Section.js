@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import {whiteBackgroundColor} from "../assets/styles/theme-styles"
 
 const SectionStyle = styled.div`
-  ${whiteBackgroundColor}
+  background-color: white;
   padding: 10px;
   margin: 10px;
   border-radius: 10px 10px 10px 10px;

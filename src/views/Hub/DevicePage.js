@@ -19,9 +19,9 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import LoadingPage from "../../components/LoadingPage";
-import { getLocalDateTimeString } from "../../assets/util/dateTimeParser";
+import { getLocalDateTimeString } from "../../util/dateTimeParser";
 import NewButton from "../../components/NewButton";
-import truncate from "../../assets/util/truncate";
+import truncate from "../../util/truncate";
 import EditDeviceModal from "../../components/Modals/EditDeviceModal";
 import DeleteDeviceModal from "../../components/Modals/DeleteDeviceModal";
 import AddDeviceModal from "../../components/Modals/AddDeviceModal";
@@ -34,15 +34,12 @@ const NewButtonStyle = styled.div`
 `;
 
 const ContainerStyle = styled.div`
-  /* border: 2px solid yellow; */
   display: flex;
   flex-direction: column;
-  width:100%;
-  /* height: ${(props) => window.innerHeight - 100}px; */
+  width: 100%;
 `;
 
 const PaperUpperStyle = styled.div`
-  /* border: 2px solid purple; */
   padding: 10px;
   background-color: white;
   height: ${(props) => Math.floor(window.innerHeight - 100) / 2}px;
@@ -51,7 +48,6 @@ const PaperUpperStyle = styled.div`
 `;
 
 const PaperBottomStyle = styled.div`
-  /* border: 2px solid green; */
   background-color: white;
   flex-grow: 1;
   margin-top: 5px;
@@ -63,7 +59,9 @@ const PaperBottomStyle = styled.div`
 const descriptionFormatter = (cell, row) => {
   return (
     <Tooltip title={cell} aria-label={"tooltip-device-description" + row._id}>
-      <Typography style={{ fontSize: "13px" }}>{truncate(cell, 30, true)}</Typography>
+      <Typography style={{ fontSize: "13px" }}>
+        {truncate(cell, 30, true)}
+      </Typography>
     </Tooltip>
   );
 };
@@ -114,13 +112,10 @@ const defaultSorted = [
 ];
 
 const DevicePage = (props) => {
-  const [hub, setHub] = useState(null);
   const [devices, setDevices] = useState(null);
   const [deviceForGraph, setDeviceForGraph] = useState(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [hiddenRowKeys, setHiddenRowKeys] = useState([]);
-  const [loadingMessage, setLoadingMessage] = useState(null);
-  const [loadingHasFailed, setLoadingHasFailed] = useState(false);
   const [editDeviceModalVisible, setEditDeviceModalVisible] = useState(false);
   const [deleteDeviceModalVisible, setDeleteDeviceModalVisible] = useState(
     false
@@ -137,6 +132,9 @@ const DevicePage = (props) => {
   const showAddDeviceModalHandler = () => setAddDeviceModalVisible(true);
   const closeAddDeviceModalHandler = () => setAddDeviceModalVisible(false);
 
+  const setSelectedDeviceHandler = (row) =>{
+    setSelectedDevice(row);
+  }
   const editRowHandler = (newRow) => {
     // e.preventDefault();
     const rowId = newRow._id;
@@ -165,7 +163,7 @@ const DevicePage = (props) => {
     return (
       <Tooltip title={cell} aria-label={"tooltip-device-name" + row._id}>
         <Button onClick={() => setDeviceForGraph(row)}>
-          <Typography color='primary' style={{ fontSize: "13px" }}>
+          <Typography color="primary" style={{ fontSize: "13px" }}>
             {truncate(cell, 30, true)}
           </Typography>
         </Button>
@@ -177,20 +175,21 @@ const DevicePage = (props) => {
     return (
       <>
         <IconButton
-          onClick={showEditDeviceModalHandler}
           aria-label={"edit-button-" + row._id}
+          onClick={(e) => {
+            e.preventDefault();
+            setSelectedDeviceHandler(row);
+            showEditDeviceModalHandler();
+          }}
         >
           <EditIcon
-            onClick={() => {
-              showEditDeviceModalHandler();
-              setSelectedDevice(row);
-            }}
           />
         </IconButton>
         <IconButton
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
+            setSelectedDeviceHandler(row);
             showDeleteDeviceModalHandler();
-            setSelectedDevice(row);
           }}
           color="secondary"
           aria-label={"delete-button-" + row._id}
@@ -327,18 +326,21 @@ const DevicePage = (props) => {
   }, []);
 
   if (!props.hub || !devices)
-    return (
-      <LoadingPage message={loadingMessage} hasFailed={loadingHasFailed} />
-    );
+    return <LoadingPage message={"Loading devices"} />;
   else
     return (
       <ContainerStyle>
         <PaperUpperStyle>
-          <div style={{ display: "flex", marginLeft:"5px" }}>
+          <div style={{ display: "flex", marginLeft: "5px" }}>
             <Typography variant="h6">Device:</Typography>
             {deviceForGraph && (
               <Badge color="secondary" variant="dot">
-                <Typography variant="h6" style={{ fontWeight: "bold",margin: "0px 5px"  }}>{deviceForGraph.name}</Typography>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: "bold", margin: "0px 5px" }}
+                >
+                  {deviceForGraph.name}
+                </Typography>
               </Badge>
             )}
           </div>

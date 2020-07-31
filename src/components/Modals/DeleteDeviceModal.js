@@ -5,6 +5,7 @@ import LoadingSection from "../LoadingSection";
 import Modal from "react-modal";
 import { Button, Row, Col } from "react-bootstrap";
 import { deleteDevice } from "../../apis/device-api";
+import ErrorMessage from "../../components/Modals/ErrorFormMessage";
 
 const modalCustomStyles = {
   content: {

@@ -58,15 +58,19 @@ const ChartWebSocket = (props) => {
         const localTimeString = date.toLocaleTimeString();
         const formattedTime = localDateString + " " + localTimeString;
         const seconds = date.getSeconds();
+        let randomSeconds;
+        if (Math.round(Math.random()) >= 0.5) {
+          randomSeconds = -1 * seconds;
+        } else randomSeconds = seconds;
 
         setData((currentData) => {
           let newDataSet = [...currentData];
-          newDataSet.push({ value: seconds });
+          newDataSet.push({ value: randomSeconds });
           newDataSet = newDataSet.slice(Math.max(newDataSet.length - 10, 0));
           return newDataSet;
         });
         setDateMessage(formattedTime);
-        setCurrentValue(seconds);
+        setCurrentValue(randomSeconds);
       });
     }
     return () => {

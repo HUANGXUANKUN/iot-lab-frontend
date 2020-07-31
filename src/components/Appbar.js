@@ -10,15 +10,11 @@ import ListIcon from "@material-ui/icons/List";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import BubbleChartIcon from "@material-ui/icons/BubbleChart";
-import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
-import { AuthContext } from "./../assets/contexts/auth-context";
+import { AuthContext } from "../contexts/auth-context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginLink = (props) => <Link to="/login" {...props} />;
-const ManageLink = (props) => <Link to="/manage" {...props} />;
 const NetworkLink = (props) => <Link to="/network" {...props} />;
 const HomeLink = (props) => <Link to="/" {...props} />;
 const TableViewLink = (props) => <Link to="/table" {...props} />;
@@ -41,13 +36,8 @@ const TableViewLink = (props) => <Link to="/table" {...props} />;
 export default function MenuAppBar() {
   const authContext = useContext(AuthContext);
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -133,7 +123,7 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem
+                <MenuItem component={LoginLink}
                   onClick={() => {
                     authContext.logout();
                     handleClose();
